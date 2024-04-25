@@ -1,0 +1,264 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body%}
+<title>SimplFit - Recipe Finder</title>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400&display=swap');
+
+:root {
+--light-color:#fff;
+--dark-color: #282828;
+--header-height: 70px;
+--search-height: 50px;
+--border-color: #ccc;
+}
+
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+
+}
+
+.btn {
+padding: 8px 10px;
+background: transparent;
+border-radius: 2px; user-select: none;
+font-size: 1rem;
+cursor: pointer;
+}
+
+.btn:hover {
+background: #f7c546;
+border-color: var(--dark-color);
+color: var(--light-color);
+}
+
+#recipe-container 
+{ 
+    display: flex; justify-content: center;
+align-items: flex-start;
+flex-wrap: wrap;
+height: calc(100vh -(var(--header-height) + var(--search-height) + 20px));
+overflow: hidden;
+overflow-y: auto;
+}
+
+.recipe {
+height: 300px; 
+width: 300px;
+padding: 8px;
+box-shadow: 0px 0px 8px 2px rgb(234, 234, 234);
+margin: 20px;
+transition: all 200ms ease-in-out;
+border-radius: 25px;
+background-color: #191919;
+}
+
+.recipe-title {
+height: 50px;
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 1rem;
+font-weight: bolder;
+color:white;
+}
+
+.recipe-image {
+height: 210px;
+}
+
+.recipe-image img {
+    height: 100%;
+    width: 100%;
+    border-radius: 25px;
+}
+
+.recipe-text {
+height: 0px;
+visibility: hidden;
+opacity: 0;
+transition: all 200ms ease-in-out;
+color: #f7c546;
+margin-top:20px;
+overflow: hidden;
+overflow-y: auto;
+transform: scale(.8);
+transform-origin: top left;
+}
+
+.recipe-text ul {
+list-style-type: circle;
+list-style-position: inside; text-align: left; 
+padding: 5px;
+}
+
+.recipe-text ul > li { 
+padding: 5px;
+}
+
+.recipe:hover .recipe-text {
+height: 120px;
+visibility: visible;
+opacity: 1;
+transform: scale(1);
+}
+
+.recipe:hover { 
+height: 420px;
+}
+.hide {
+ display: none;
+}
+
+@media only screen and (max-width: 700px) 
+{ 
+    body {
+background: rgb(234, 234, 234);
+}
+
+.recipe {
+background: var(--light-color);
+box-shadow: 0px 0px 10px 2px var(--dark-color); 
+width: 350px;
+}
+
+input[type="text"] {
+     background: transparent; 
+     color: var(--light-color);
+}
+
+.btn {
+background: var(--light-color); 
+color: var(--dark-color);
+}
+}
+
+
+.aqi-input input{
+            border-radius: 25px;
+            background-color: #191919;
+            color: white;
+            text-align: left;
+        }
+        .aqi-input button{
+            color:#f7c546;
+            background-color: #191919;
+        }
+</style>
+<section class="container">
+    <div class="section-title">
+        <span>Food Recipes</span>
+        <h2>Food Recipes</h2>
+        <p>Put a smile while you cook</p>
+        </div>
+<div id="loading" ></div>
+<div class="aqi-input">
+    <div class="input-group input-group-lg mb-5">
+<input id="txtSearch" type="text" placeholder="Search your favorite food recipe" class="form-control inputstyle" required>
+<button class="btn">Find Recipes</button></div></div>
+
+<div id="recipe-container">
+<div class="">
+<div class=""></div>
+<div class="">
+<img src="" alt="">
+</div>
+<div class="recipe-text">
+<ul>
+<li>Step 1</li>
+<li>Step 2</li>
+<li>Step 3</li>
+<li>Step 4</li>
+<li>Step 5</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+
+<script>
+    const appId = "70f9dce2";
+const appKey = "acabcf82d9e243bfade0d2b1814e5f16";
+const baseUrl = `https://api.edamam.com/api/recipes/v2?type=public&app_id=${appId}&app_key=${appKey}`;
+const recipeContainer = document.querySelector("#recipe-container");
+const txtSearch = document.querySelector("#txtSearch");
+const btnFind = document.querySelector(".btn");
+const loadingEle = document.querySelector("#loading");
+
+btnFind.addEventListener("click", () => loadRecipies(txtSearch.value));
+txtSearch.addEventListener("keyup", (e) => { 
+const inputVal = txtSearch.value;
+if (e.keyCode === 13) {
+loadRecipies(inputVal);
+}
+});
+
+txtSearch.addEventListener("keyup", (e) => {
+const inputVal = txtSearch.value;
+if (e.keyCode === 13) {
+loadRecipies(inputVal)
+I
+}
+})
+
+const toggleLoad = (element, isShow) => {
+     element.classList.toggle("hide", isShow);
+};
+const setScrollPosition = () => {
+       recipeContainer.scrollTo({top: 0, behavior: "smooth"}); 
+};
+
+function loadRecipies (type = "") {
+    toggleLoad(loadingEle, false)
+const url = baseUrl + `&q=${type}`;
+fetch(url)
+.then((res) => res.json())
+.then((data) => 
+{
+renderRecipies (data.hits);
+toggleLoad(loadingEle, true); 
+})
+.catch((error) => toggleLoad(loadingEle, true))
+.finally(() => setScrollPosition());
+}
+
+loadRecipies();
+
+const getRecipeStepsStr = (ingredientLines = []) => 
+{
+let str = "";
+for (var step of ingredientLines) {
+str = str + `<li>${step}</li>`;
+}
+return str;
+};
+
+const renderRecipies = (recipeList = []) => 
+{ 
+ recipeContainer.innerHTML = "";
+recipeList.forEach((recipeObj) => { 
+const {
+label: recipeTitle,
+ingredientLines,
+image: recipeImage,
+} = recipeObj.recipe;
+const recipeStepStr=getRecipeStepsStr(ingredientLines);
+const htmlStr = `<div class="recipe"> 
+<div class="recipe-title">${recipeTitle}</div>
+<div class="recipe-image">
+  <img src="${recipeImage}" />
+</div>
+<div class="recipe-text">
+<ul>
+${recipeStepStr}
+</ul>
+</div>
+</div>`;
+recipeContainer.insertAdjacentHTML("beforeend", htmlStr);
+});
+};
+
+</script>
+{% endblock %}

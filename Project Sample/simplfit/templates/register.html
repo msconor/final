@@ -1,0 +1,187 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>SimplFit - Login</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <link href="{%static 'assets/img/logo.png' %}" rel="icon">
+  <link href="{%static 'assets/img/logo.png' %}" rel="apple-touch-icon">
+
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  <link href="{%static 'assets/vendor/aos/aos.css'%}" rel="stylesheet">
+  <link href="{%static 'assets/vendor/bootstrap/css/bootstrap.min.css'%}" rel="stylesheet">
+  <link href="{%static 'assets/vendor/bootstrap-icons/bootstrap-icons.css'%}" rel="stylesheet">
+  <link href="{%static 'assets/vendor/boxicons/css/boxicons.min.css'%}" rel="stylesheet">
+  <link href="{%static 'assets/vendor/glightbox/css/glightbox.min.css'%}" rel="stylesheet">
+  <link href="{%static 'assets/vendor/swiper/swiper-bundle.min.css'%}" rel="stylesheet">
+
+  <link href="{% static 'assets/css/style.css'%}" rel="stylesheet">
+
+</head>
+
+<body>
+
+  <section id="topbar" class="d-flex align-items-center">
+    <div class="container d-flex justify-content-center justify-content-md-between">
+      <div class="contact-info d-flex align-items-center">
+        <i class="bi bi-envelope-fill"></i><a href="mailto:info@simplfit.com">info@simplfit.com</a>
+        <i class="bi bi-phone-fill phone-icon"></i> 0416-222456
+      </div>
+      <div class="social-links d-none d-md-block" >
+        <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
+        <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
+        <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
+        <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+        <a href="#" class="location"><i class="bi-geo-alt-fill loc-info"> </i><span id="city"></span></a>
+        <script>
+          async function fetchText(){
+    let url ='https://ipinfo.io/json?token=';/*94703aed4ea5bf*/
+    let response = await fetch(url);
+    let data = await response.json();
+    document.getElementById("city").innerHTML=data.city;
+}
+fetchText();
+      </script>
+      </div>
+    </div>
+   
+  </section>
+
+  <header id="header" class="d-flex align-items-center">
+    <div class="container d-flex align-items-center justify-content-between">
+
+      <h1 class="logo"><a href="home.html">SimplFit</a></h1>
+      
+
+      <nav id="navbar" class="navbar">
+      
+        <ul>    
+          <li><a class="nav-link scrollto" href="home.html">Home</a></li>
+          <li><a class="nav-link scrollto" href="home.html#about">About</a></li>
+          <li class="dropdown"><a class="nav-link scrollto" href=""><span>Services</span> <i class="bi bi-chevron-down"></i></a>
+            <ul>
+              <li class="dropdown"><a href="#"><span>Trackers</span> <i class="bi bi-chevron-right"></i></a>
+                <ul>
+                  <li><a href="aqi.html"><span>AQI Trackers</span></a></li>
+                  <li><a href="weather.html">Weather Tracker</a></li>
+                  <li class="dropdown"><a href="#"><span>Nutritional Trackers</span> <i class="bi bi-chevron-down"></i></a>
+                    <ul>
+                      <li><a href="nutri.html">Text Search</a></li>
+                      <li><a href="#">Image Search</a></li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+              <li><a href="#">Food Recipes</a></li>
+              <li><a href="#">Exercise</a></li>
+              <li><a href="#">Tips</a></li>
+            </ul>
+          </li>
+          <li><a class="nav-link scrollto" href="#">Blogs</a></li>
+          <li><a class="nav-link scrollto" href="home.html#contact">Contact</a></li>
+          <li><a class="nav-link scrollto active" href="#login">Login</a></li>
+        </ul>
+        <i class="bi bi-list mobile-nav-toggle"></i>
+      </nav>
+
+    </div>
+  </header>
+  
+  <style>
+    .signup .card-body{
+            background-color:#191919;
+        }
+    .signup .form-group{
+            color: white;
+            border-color: #191919;
+        }
+    .signup .form-group button{
+            background-color: #f7c546;
+            color: white;
+            border-color: #f7c546;
+        }
+
+    .signup .form-group button:hover{
+            border: 5px #f7c546 ;
+            background-color: #f7c546;
+        }
+    .signup .form-group a{
+            color:#f7c546 ;
+        }
+  </style><section id="services" class="services">
+    <div class="container">
+
+      <div class="section-title">
+        <span>Sign up</span>
+        <h2>Sign up</h2>
+        <p></p>
+      </div>
+   <div class="signup">
+
+<div class='row'>
+    <div class='col-lg-6 offset-lg-3'>
+        <div class='card bg-secondary mb-3'>
+            <div class='card-body'>
+
+                <div class='form-group'>
+                  <center>
+                    {% if message %}
+                  <div role='alert' style="color: #e72323;;">{{ message }}
+                 {% endif %}</center>
+                    <form action="{% url 'register' %}" method='POST'>
+                        {% csrf_token %}
+                        <div class='form-group'>
+                            <label for='inputUsername' class='form-label mt-4'>
+                                Username
+                            </label>
+                            <input type='text' name='username' class='form-control' id='inputUsername' placeholder='Enter username' required>
+                        </div>
+                  
+                        <div class='form-group'>
+                            <label for='inputEmail' class='form-label mt-4'>
+                                Email Address
+                            </label>
+                            <input type='email' name='email' class='form-control' id='inputEmail' placeholder='Enter email' required>
+                        </div>
+
+                        <div class='form-group'>
+                            <label for='inputPassword1' class='form-label mt-4'>
+                                Password
+                            </label>
+                            <input type='password' name='password' class='form-control' id='inputPassword1' placeholder='Enter password' required>
+                        </div>
+
+                        <div class='form-group'>
+                            <label for='inputPassword2' class='form-label mt-4'>
+                                Confirm Password
+                            </label>
+                            <input type='password' name='confirmation' class='form-control' id='inputPassword2' placeholder='Confirm password' required>
+                        </div>
+                        <center>
+
+                        <div class='form-group mt-4'>
+                            <button type='submit' class='btn btn-primary'>
+                                Register
+                            </button>
+                        </div>
+
+                    </form>
+
+                    <div class='mt-2'>
+                        Already have an account? <a href="login.html" type='button'> Signin </a>
+                    </div></center>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

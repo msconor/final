@@ -1,0 +1,325 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body %}  
+<title>SimplFit - Water Tracker</title>
+  <style>
+      
+    .card-body{
+        background-color: white;
+        }
+    .card-body p{
+        color: white;
+    }
+    .card-body strong{
+        color: #f7c546;
+    }
+    .card-body .form-group button{
+        background-color: white;
+        border: 2px white;
+    }
+    .card-body .form-group button:hover{
+        background-color: white;
+        border: 2px white;
+    }
+    .card-body .form-group label{
+        color: white;
+    }
+    .table thead{
+        text-align: center;
+        color: #f7c546;
+    }
+    .table tbody{
+        
+        text-align: center;
+    }
+  </style>
+  <style>
+
+    .height {
+        min-height: 20vh;
+    }
+    
+    .big-cup {
+        background: white;
+        color: #191919;
+        border: 0.3rem solid #f7c546;
+        border-radius: 0 0 2.5rem 2.5rem;
+        width: 15em;
+        min-height: 20em;
+    }
+    
+    .litres {
+        font-size: 1.3rem;
+    }
+    
+    .percentage {
+        font-size: 2.2rem;
+        background: #f7c546;
+        color: #ffff;
+        min-width: 80%;
+    }
+    
+    .cups {
+        min-height: 20em;
+    }
+    
+    .small-cup {
+        background: white;
+        border: 0.2rem solid #191919;
+        border-radius: 0 0 1rem 1rem;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: all 0.3s ease;
+        background: rgb(255,255,255);
+        background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(70,225,247,1) 76%);
+        color: #191919;
+    }
+    
+    .small-cup:hover {
+        background: #f7c546;
+        color: white;
+    }
+    
+    .cup-100 {
+        height: 3em;
+        width: 4em;
+        
+    }
+
+    .cup-250 {
+        height: 4em;
+        width: 4em;
+        
+    }
+    
+    .cup-500 {
+        height: 5em;
+        width: 4em;
+    }
+    
+    .cup-750 {
+        height: 6em;
+        width: 4em;
+    }
+    
+    .cup-1000 {
+        height: 7em;
+        width: 4em;
+    }
+    
+    
+    @media screen and (max-width: 768px) {
+        .heading {
+            margin-top: 1em;
+        }
+    }
+    
+    </style>
+  
+<section id="aqi" class="aqi">
+  <div class="container1">
+    <div class="section-title">
+        <span>Water Tracker</span>
+        <h2>Water Tracker</h2>
+        <p>Lets test your water drinking ability.</p>
+        </div>
+
+        <div class='card bg-secondary mb-3' style="border-color:white ;">
+
+            <div class='card-body' >
+            
+            <center>
+                <h5> Daily Water Goal: <span id="goal"> 0 L</span> <button onClick="refreshPage() " class='btn btn' style="font-size: 16px;" ><a href="water_goal.html" target="popup" 
+                    onclick="window.open('water_goal.html','popup','width=600,height=600');"><i class="bi-pencil-square" style="color:green; "></i></a></button></h5>
+                    <script>
+                        function refreshPage(){
+                           alert("Important! Refresh page after setting new goal")
+                            
+                        } 
+                        </script>
+                    <!-- big cup -->
+			<div class="col-md-4 text-center d-flex justify-content-center">
+				<div class="big-cup">
+					<div class="remained d-flex flex-column mt-5">
+						<p class="litres font-weight-bold" style="color:#191919;">3.00 L </p>
+						<p class="remaining-text" style="color:#191919;">Remaining</p><a href="" onclick="window.location.reload"><i class="bi-arrow-clockwise" style="color: black;"></i></a>
+						<div class="percentage font-weight-bold rounded align-self-center mt-5" >
+							0 %
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- end of big cup -->
+            </center>
+
+            <div class='form-group'>
+
+                    <form action="{% url 'water_log' %}" method='POST' onsubmit="return myFunction()">
+                        {% csrf_token %}
+                        <div class='form-group'>
+                            <div class='row'>
+                                <div class='col-5'>
+                                    <input
+                                        class='form-control'
+                                        type='date'
+                                        name='date' 
+                                        id='date'
+                                    hidden>
+                                </div>
+                                <div class='col-5'>
+                                    <input
+                                        class='form-control'
+                                        type='time'
+                                        name='time' 
+                                        id='time'
+                                   hidden >
+                                </div>
+                               <center> <div class='col-10'>
+                                        <br>
+                                        <button class='btn btn-primary' type='number' name='water' id='water' min=".25"
+                                        value="1000" max="10.25" placeholder='1000 ml'  title='Water' required>
+                                        <div class="small-cup cup-1000">1000 ml</div> </button>
+
+                                        <button class='btn btn-primary' type='number' name='water' id='water' min=".25"
+                                        value="750" max="10.25" placeholder='750 ml'  title='Water' required>
+                                        <div class="small-cup cup-750">750<br> ml</div> </button>
+
+                                        <button class='btn btn-primary' type='number' name='water' id='water' min=".25"
+                                        value="500" max="10.25" placeholder='500 ml'  title='Water' required>
+                                        <div class="small-cup cup-500">500<br>ml</div> </button>
+
+                                        <button class='btn btn-primary' type='number' name='water' id='water' min=".25"
+                                        value="250" max="10.25" placeholder='250 ml'  title='Water' required>
+                                        <div class="small-cup cup-250">250 <br>ml</div> </button>
+
+                                        <button class='btn btn-primary' type='number' name='water' id='water' min=".25"
+                                        value="100" max="10.25" placeholder='100 ml'  title='Water' required>
+                                        <div class="small-cup cup-100">100 <br>ml</div> </button>
+
+                                        <button class='btn btn-primary' type='number' name='water' id='water' min=".25"
+                                        value="250" max="10.25" placeholder='250 ml'  title='Water' required>
+                                        <div class="small-cup cup-250">250 <br>ml</div> </button>
+
+                                        <button class='btn btn-primary' type='number' name='water' id='water' min=".25"
+                                        value="500" max="10.25" placeholder='500 ml'  title='Water' required>
+                                        <div class="small-cup cup-500">500<br>ml</div> </button>
+
+                                        <button class='btn btn-primary' type='number' name='water' id='water' min=".25"
+                                        value="750" max="10.25" placeholder='750 ml'  title='Water' required>
+                                        <div class="small-cup cup-750">750<br> ml</div> </button>
+
+                                        <button class='btn btn-primary' type='number' name='water' id='water' min=".25"
+                                        value="1000" max="10.25" placeholder='1000 ml'  title='Water' required>
+                                        <div class="small-cup cup-1000">1000 ml</div> </button>
+                                </center>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+
+            </div>
+        </div>
+        <table id='watertable' class='table'>
+            <thead>
+                <tr>
+                    <th scope='col' class='col-md-4'>Date</th>
+                    <th scope='col' class='col-md-4'>Water Quantity</th>
+                    <th scope='col' class='col-md-4'>Time</th>
+                    <th scope='col' class='col-md-4'><a class='btn btn-danger' href="{% url 'water_log_delete_all' %}" onclick="return confirm('Are you sure you want to clear water log?');">
+                        <span style="color: white;">Clear Log</span>
+                     </a></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for water_record in user_water_log %}
+                    <tr>
+                        <td class='col-md-4'>{{ water_record.drink_date|date:'d-m-Y' }}</td>
+                        <td class='col-md-4' >{{ water_record.water |floatformat:0}} ml</td>
+                        <td class='col-md-4'>{{ water_record.drink_time }}</td>
+                        <td class='col-md-4'>
+                            <a class='btn btn-danger' href="{% url 'water_log_delete' water_record.id %}" onclick="return confirm('Are you sure you want to delete this item?');">
+                            <i class="bi-trash"></i></a>
+
+                        </td>
+                    </tr>
+                    {% endfor %}
+            </tbody>
+        </table>
+                  
+    </div>
+    
+</div>
+</div>
+  </div></section>
+
+<script>
+    var date = new Date();
+
+    var day = date.getDate();
+    var month = date.getMonth() + 1;
+    var year = date.getFullYear();
+
+    if (month < 10) month = "0" + month;
+    if (day < 10) day = "0" + day;
+
+    var today = year + "-" + month + "-" + day; 
+    document.getElementById("date").value = today;
+
+    var hour = date.getHours();
+    var min  = date.getMinutes();
+
+    document.getElementById('time').value = date.toTimeString().substring(0,5);
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
+  <script>
+    var table  = document.getElementById('watertable');
+    var water = 0
+    var goal = localStorage.getItem("water_goal");
+    for(var i = 1; i <table.rows.length; i++) {
+        water = water + parseFloat(table.rows[i].cells[1].innerHTML);   
+    }
+    const smallCups = water;
+    const litres = document.querySelector(".litres");
+    const percentage = document.querySelector(".percentage");
+    const remained = document.querySelector(".remained");
+    const todaysGoalText = document.querySelector("h5");
+
+    let totalWater = 0;
+    let percentValue = 0;
+
+        const logValue = parseInt(smallCups);
+
+        totalWater = totalWater + logValue/1000;
+        var f = (Math.round(goal*10)/10);
+        var t = (f-totalWater);
+        litres.innerText = Math.round(t*100)/100 + " L";
+        pv = Math.round(goal*1000)
+        percentValue += (logValue / pv) * 100;
+        percentage.innerText = percentValue.toFixed(1) + " %";
+
+        if (percentValue == 100) {
+            litres.innerText = "0 L";
+            percentage.innerText = "100 %";
+            alert("Hurray! You have achieved your daily goal.");
+        }
+        else if(percentValue >100){
+            litres.innerText = "0 L";
+            percentage.innerText = "100 %";
+            alert("Great! You drank "+ totalWater +" liters of water today.");
+        }
+
+    console.log(f);
+    document.getElementById("goal").innerHTML = Math.round(goal*10)/10+" L";
+        
+
+</script>
+<script>
+  
+</script>
+  
+{% endblock %}

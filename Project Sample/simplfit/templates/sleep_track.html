@@ -1,0 +1,295 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body %}  
+<title>SimplFit - Sleep Cycle Tracker</title>
+  <style>
+        .aqi-input input{
+        border-radius: 25px;
+        background-color: #f7c546;
+        color: white;
+        text-align: left;
+    }
+    .aqi-input button{
+        color:#f7c546;
+        background-color: #191919;
+    }
+    .card-body{
+        background-color: rgba(25, 25, 25, 0.95);
+        }
+    .card-body p{
+        color: white;
+    }
+    .card-body strong{
+        color: #f7c546;
+    }
+    .card-body .form-group button{
+        background-color: #f7c546;
+        border: 2px #f7c546;
+    }
+    .card-body .form-group label{
+        color: white;
+    }
+    .table thead{
+        text-align: center;
+        color: #f7c546;
+    }
+    .table tbody{
+        
+        text-align: center;
+    }
+  </style>
+
+<section id="aqi" class="aqi">
+  <div class="container1">
+    <div class="section-title">
+        <span>Sleep Tracker</span>
+        <h2>Sleep Tracker</h2>
+        <p>Enter your sleep data to see how your sleep patterns change over time.</p>
+        </div>
+        
+        <div class='card bg-secondary mb-3'>
+
+            <div class='card-body'>
+
+            <div class='form-group'>
+
+                    <form action="{% url 'sleep_log' %}" method='POST' onsubmit="return myFunction()">
+                        {% csrf_token %}
+                        <div class='form-group'>
+                            <div class='row'>
+                                <div class='col-5'>
+                                    <label for='sleep_date' class='form-label mt-2'>
+                                        Date:
+                                    </label>
+                                    <input
+                                        class='form-control'
+                                        type='date'
+                                        name='date' 
+                                        id='date'
+                                    readonly>
+                                </div>
+                                <div class='col-5'>
+                                    <label for='hours' class='form-label mt-2'>
+                                       Hours of sleep:
+                                    </label>
+                                    <input 
+                                        class='form-control'
+                                        type='number' 
+                                        name='hours'
+                                        id="hours"
+                                        min="1" max="24"
+                                        placeholder='0'  title='Sleep'  step=".01"
+                                        pattern="^\d*(\.\d{0,1})?$" required>
+                                </div>
+                                <div class='col-2'>
+                                    <button type='submit' class='btn btn-primary' style='margin-top:40px;'>
+                                        Add
+                                    </button> </div>
+                                    
+                               
+                            </div>
+                        </div>
+                    </form>
+                    <center>
+                    <button onClick="refreshPage() " class='btn btn-primary' style='margin-top:40px;' ><a href="sleep_goal.html" target="popup" 
+                        onclick="window.open('sleep_goal.html','popup','width=600,height=600');" style="color: white;">Calculate Hours Sleep </a></button> <button class='btn btn-primary' style='margin-top:40px;'><a href=""  onclick="window.location.reload"><i class="bi-arrow-clockwise" style="color: white;"></i></a></button>
+                        <script>
+                            function refreshPage(){
+                               alert("Important! Refresh page after setting new goal")
+                                
+                            } 
+                            </script></center>
+
+                </div>
+
+            </div>
+        </div>
+        <table id='sleeptable' class='table' >
+            <thead>
+                <tr>
+                    <th scope='col' class='col-md-4'>Date</th>
+                    <th scope='col' class='col-md-4'>Sleep Hours</th>
+                    <th scope='col' class='col-md-4'><a class='btn btn-danger' href="{% url 'sleep_log_delete_all' %}" onclick="return confirm('Are you sure you want to clear sleep log?');">
+                        <span style="color: white;">Clear Log</span>
+                     </a></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for sleep_record in user_sleep_log %}
+                    <tr>
+                        <td class='col-md-4'>{{ sleep_record.sleep_date|date:'d-m-Y' }}</td>
+                        <td class='col-md-4' >{{ sleep_record.hours }} hr</td>
+                        <td class='col-md-4'>
+
+                            <a class='btn btn-danger' href="{% url 'sleep_log_delete' sleep_record.id %}" onclick="return confirm('Are you sure you want to delete this item?');">
+                            <i class="bi-trash"></i></a>
+
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+            
+        </table>
+        <center>
+            <div class='col-md-6 mt-4'>
+                <div class='card bg-secondary mb-3'>
+                
+                    <div class='card-body justify-content-center'>
+                        <div class='chart-bar'>
+                            <canvas id='myChart' width="500" height="300"></canvas>
+                        </div>
+                    </div>
+                </div></center>
+
+    </div>
+</div>
+
+</div>
+
+</div>
+  </div></section>
+  <script>
+    var date = new Date();
+
+var day = date.getDate();
+var month = date.getMonth() + 1;
+var year = date.getFullYear();
+
+if (month < 10) month = "0" + month;
+if (day < 10) day = "0" + day;
+
+var today = year + "-" + month + "-" + day;       
+document.getElementById("date").value = today;
+  </script>
+  <script>
+    function myFunction() {
+      var hour = document.getElementById("hours").value;
+      submitOK = "true";
+    
+    {
+        
+      if (hour < 5) {
+        
+        alert("High Health Risk Alert!!! Not getting enough sleep can lead to diminished brain performance and, in the long term, greater risk of health conditions. 'Try to get more sleep!'");
+        submitOK = "false";
+      }
+      else if (hour < 7) {
+        
+        alert("Low Health Risk Alert!!! Try to get sleep for atleast 7hrs per day to avoid greater risk of health conditions");
+        submitOK = "false";
+      }
+      else if (hour < 13) {
+        
+        alert("Great!!! You had enough sleep to acheive your goal ");
+        submitOK = "false";
+      }
+      else{
+        alert("Health Risk Alert!!! Oversleeping has been linked to a host of medical problems, including diabetes, heart disease, and increased risk of death.");
+        submitOK = "false";
+    }
+
+      if (submitOK == "false") {
+        return true;
+      }
+    }
+}
+    </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
+<script>
+    var table  = document.getElementById('sleeptable');
+    
+var recorded_hours = [];
+var recorded_date = [];
+
+for(var i = 1; i < table.rows.length; i++) {
+    recorded_hours.push([
+        parseFloat(table.rows[i].cells[1].innerHTML)
+    ]);
+
+    recorded_date.push([
+        table.rows[i].cells[0].innerHTML
+    ]); 
+}
+
+var values = recorded_hours.flat();
+
+
+
+// Set new default font family and font color to mimic Bootstrap's default styling
+Chart.defaults.global.defaultFontFamily = 'system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"';
+Chart.defaults.global.defaultFontColor = '#fff';
+
+// Area Chart - Weight History
+var ctx = document.getElementById('myChart');
+var myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: [...recorded_date],
+        datasets: [{
+            data: values,
+            label: 'Hours of Sleep',
+            lineTension: 0.3,
+            
+            borderColor: '#f7c546',
+            pointRadius: 3,
+            pointBackgroundColor: '#f7c546',
+            pointBorderColor: '#f7c546',
+            pointHoverRadius: 5,
+            pointHoverBackgroundColor: '#f7c546',
+            pointHitRadius: 100,
+            pointBorderWidth: 0,
+        }],
+    },
+    options: {
+        scales: {
+            xAxes: [{
+                ticks: {
+                    autoSkip: false,
+                    maxRotation: 60,
+                    minRotation: 60
+                },
+                gridLines: {
+                    display: true
+                },
+              
+            }],
+            yAxes: [{
+                ticks: {
+                    min: 0,
+                    max: 24,
+                    maxTicksLimit: 12,
+                    padding: 6,
+                    // Include a 'kg' in the ticks
+                    callback: function(value, index, values) {
+                        return value + ' hr';
+                    }
+                },
+
+                gridLines: {
+                    display: false
+                },
+                
+            }],
+        },
+        legend: {
+            display: false
+        }
+    }
+});
+</script>
+
+<script>
+    
+var date = new Date();
+    
+    var day = date.getDate();
+    var month = date.getMonth() + 1;
+    var year = date.getFullYear();
+    
+    if (month < 10) month = "0" + month;
+    if (day < 10) day = "0" + day;
+var goal = localStorage.getItem("sleep_goal");
+document.getElementById("hours").value=goal;
+console.log(goal)
+</script>
+{% endblock %}

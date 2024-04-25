@@ -1,0 +1,496 @@
+{% extends 'base.html' %}
+{% load static %}{% load mathfilters%}{% load humanize%}
+{% block body%}
+<title>SimplFit - Nutrirional Search</title>
+<style>
+    .aqi-input input{
+        border-radius: 25px;
+        background-color: #191919;
+        color: white;
+        text-align: left;
+    }
+    .aqi-input button{
+        color:#f7c546;
+        background-color: #191919;
+    }
+    .aqi-table table{
+        border-collapse: separate;
+        border-radius: 10px;
+        width: 30%;
+    }
+    .aqi-table tr{
+        border: 1px solid white ; 
+        background-color: #191919;
+        color: #f7c546;
+        
+    }
+    .aqi-table td{
+        color: rgba(255, 255, 255, 0.6);
+        text-align: center;
+    }
+    .alert .alert-danger{
+        border-radius: 50px;
+    }
+    .btn {
+padding: 8px 10px;
+background: transparent;
+border-radius: 2px; user-select: none;
+font-size: 1rem;
+cursor: pointer;
+}
+
+.btn:hover {
+background: #f7c546;
+border-color: var(--dark-color);
+color: var(--light-color);
+}
+ 
+.caloriescont ul li {
+  list-style: none;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #efefef;
+  width: 80%;
+}
+
+.caloriescont h3 {
+  color: #ffffff;
+  font-size: 2em;
+  text-transform: capitalize;
+}
+
+.caloriescont h5 {
+  color: #ffffff;
+}
+
+.servingsize {
+  background-color: #000000;
+  padding: 10px;
+  color: #ffffff;
+}
+
+</style>
+
+    <section id="aqi" class="aqi">
+    <div class="container">
+
+        <div class="section-title">
+        <span>Nutrirional Tracker</span>
+        <h2>Nutrirional Tracker</h2>
+        <p>Let's find calories in your food by text</p>
+        </div>
+        <div class="aqi-input">
+            <form method="POST">
+                {%csrf_token%}
+                <div class="input-group input-group-lg mb-5">
+                    <input type="text" name="query" class="form-control inputstyle"
+                        placeholder="search for calories in your food... {eg.,250g chicken}" required>
+                    <button class="btn whoop" type="submit" id="button-addon2">Find calories</button>
+                </div>
+            </form>
+            {% if api.1%}
+            <center>
+            {%if api == "oops! There was an error"%}
+            <div class="alert alert-warning"> Oh no! something went wrong.Please try again in sometime.</div>
+            {%elif api.message%}
+            <div class="alert alert-warning">Please try again after sometime!</div> 
+            {%endif%} <br>
+            <h1><span style="color: #f7c546;">{{api.0.name | capfirst}} and {{api.1.name | capfirst}}</span> has a total of <strong style="color: #f7c546;"> {{api.1.calories |addition:api.0.calories}}</strong> Calories
+                {%if api.1.calories > 200 %}
+                <img src="{% static 'images/shocked.png'%}" class="img-responsive" />
+                {%endif%}
+            </h1></center>
+
+            {%if api.0.sodium_mg > 550 %}  
+            {%if api.1.sodium_mg > 550 %} 
+            <div class="alert alert-danger d-flex align-items-center mt-3" role="alert">
+                <div>
+                    This food contains an high amount of sodium. High Sodium cuases Sever dehydration and water
+                    retention.
+                </div>
+            </div>
+            {%endif%}{%endif%}
+
+            {%if api.0.sugar_g > 36%}   
+            {%if api.1.sugar_g > 36%}   
+            <div class="alert alert-danger d-flex align-items-center mt-3" role="alert">
+                <div>
+                    This food contains an high amount of sugar. An excess of sweetened foods and beverages can lead to weight gain, blood sugar problems, and an increased risk of heart disease, among other dangerous conditions.
+                </div>
+            </div>
+            {%endif%}{%endif%}
+
+            {%if api.0.cholesterol_mg > 300%}
+            {%if api.1.cholesterol_mg > 300%}   
+            <div class="alert alert-danger d-flex align-items-center mt-3" role="alert">
+                <div>
+                    This food contains an high amount of cholesterol. Your body needs cholesterol to build healthy cells, but high levels of cholesterol can increase your risk of heart disease.  
+                </div>
+            </div>
+            {%endif%}{%endif%}
+
+            {%if api.0.fat_total_g > 24.25%}
+            {%if api.1.fat_total_g > 24.25%}   
+            <div class="alert alert-danger d-flex align-items-center mt-3" role="alert">
+                <div>
+                    This food contains an high amount of fat. High consumption of fat causes obesity, diabetes, heart disease, and possibly cancer, therefore low-fat diets are optimal.  
+                </div>
+            </div>
+            {%endif%}{%endif%}
+
+            {%if api.0.fat_saturated_g > 7.8%}
+            {%if api.1.fat_saturated_g > 7.8%}   
+            <div class="alert alert-danger d-flex align-items-center mt-3" role="alert">
+                <div>
+                    This food contains an high amount of saturated fat. Eating too much saturated fats in your diet can raise "bad" LDL cholesterol in your blood, which can increase the risk of heart disease and stroke.
+                </div>
+            </div>
+            {%endif%}{%endif%}
+        </div>
+        <div class="box row justify-content-center mt-5 mb-5" >
+            <div class="col-md-10 caloriescont shadow rounded" style="background-color: #191919; color:white;">
+                <div class="row">
+
+                    <div class="col-md-6" style="background-color: #f7c546;">
+                        <h2 class="mt-3 mb-4">&nbsp;&nbsp;&nbsp;&nbsp;Nutritional Values </h2><span></span>
+                        <ul>
+                            <li class="servingsize">Serving Size per {{api.0.serving_size_g}}/Grams <span class="float-end"></span></li>
+                            <li>Carbohydrates: <span class="float-end">{{api.1.carbohydrates_total_g|addition:api.0.carbohydrates_total_g|div:2|floatformat:1}}g</span>
+                            </li>
+                            <li>Cholesterol: <span class="float-end">{{api.1.cholesterol_mg|addition:api.0.cholesterol_mg|div:2|floatformat:1}}mg</span></li>
+                            <li>Saturated fat: <span class="float-end">{{api.1.fat_saturated_g|addition:api.0.fat_saturated_g|div:2|floatformat:1}}g</span></li>
+                            <li>Total Fat: <span class="float-end">{{api.1.fat_total_g|addition:api.0.fat_total_g|div:2|floatformat:1}}g</span></li>
+                            <li>Fiber: <span class="float-end">{{api.1.fiber_g|addition:api.0.fiber_g|div:2|floatformat:1}}g</span></li>
+                            <li>Potassium:<span class="float-end">{{api.1.potassium_mg|addition:api.0.potassium_mg|div:2|floatformat:1}}mg</span></li>
+                            <li>Protein: <span class="float-end">{{api.1.protein_g|addition:api.0.protein_g|div:2|floatformat:1}}g<span></li>
+                            <li>Sodium:<span class="float-end">{{api.1.sodium_mg|addition:api.0.sodium_mg|div:2|floatformat:1}}mg</span></li>
+                            <li>Sugar: <span class="float-end">{{api.1.sugar_g|addition:api.0.sugar_g|div:2|floatformat:1}}g</span></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6" style="background-color:#efefef; color: #191919">
+                        <h4 class="mt-3 mb-4" style="color: #000000;">To burn <strong>{{api.1.calories|addition:api.0.calories}}</strong>  calories you will have to</h4>
+                        <div class="d-flex align-items-center mb-5">
+                            <div class="flex-shrink-0">
+                                <img src="{% static 'images/running.png'%}" alt="...">
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h5 style="color: #f7c546;"> Jog </h5>
+                                <p>you will have to jog for <strong> {{api.1.calories|addition:api.0.calories|div:11.4|mul:1|div:2|floatformat:0}}</strong> Minutes</p>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center mb-5">
+                            <div class="flex-shrink-0">
+                                <img src="{% static 'images/yoga.png'%}" alt="...">
+                            </div>
+                            <div class="flex-grow-1 ms-4">
+                                <h5 style="color: #f7c546;"> Do Power Yoga </h5>
+                                <p>you will have to Power Yoga for <strong>{{api.1.calories|addition:api.0.calories|div:5|mul:1|div:2|floatformat:0}} </strong> Minutes</p>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center mb-5">
+                            <div class="flex-shrink-0">
+                                <img src="{% static 'images/weightlifter.png'%}" alt="...">
+                            </div>
+                            <div class="flex-grow-1 ms-4">
+                                <h5 style="color: #f7c546;">Get a Gym Workout </h5>
+                                <p>you will have to lift weight for <strong>
+                                    {{api.1.calories|addition:api.0.calories|div:6.25|mul:1|div:2|floatformat:0}} </strong> Minutes </p>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <div class="flex-shrink-0">
+                                <img src="{% static 'images/walking.png'%}" alt="...">
+                            </div>
+                            <div class="flex-grow-1 ms-1">
+                                <h5 style="color: #f7c546;"> Go for a Brisk Walk </h5>
+                                <p>you will have to brisk walk for <strong>
+                                    {{api.1.calories|addition:api.0.calories|div:5|mul:1|div:2|floatformat:0}} </strong> Minutes</p>
+                            </div>
+                        </div><br>
+                        <div class="d-flex align-items-center mb-5">
+                            <div class="flex-shrink-0">
+                                <img src="{% static 'images/swimming.png'%}" alt="...">
+                            </div>
+                            <div class="flex-grow-1 ms-4">
+                                <h5 style="color: #f7c546;">Go for a Swim</h5>
+                                <p>you will have to swim for<strong>
+                                    {{api.1.calories|addition:api.0.calories|div:6.67|mul:1|div:2|floatformat:0}} </strong> Minutes </p>
+                            </div>
+                        </div>
+                    </div> 
+                    <div>
+                        <canvas id="myChart1" width="400" height="400"></canvas>
+                    </div>                       
+                </div>                       
+                </div>
+                {%else%}
+            <center>
+            {%if api%}
+            {%if api == "oops! There was an error"%}
+            <div class="alert alert-warning"> Oh no! something went wrong.Please try again in sometime.</div>
+            {%elif api.message%}
+            <div class="alert alert-warning">Please try again after sometime!</div> 
+            {%endif%} 
+            <h1><span style="color: #f7c546;">{{api.0.name | capfirst}}</span> has a total of <strong style="color: #f7c546;"> {{api.0.calories}}</strong> Calories
+                {%if api.0.calories > 200 %}
+                <img src="{% static 'images/shocked.png'%}" class="img-responsive" />
+                {%endif%}
+            </h1></center>
+
+            {%if api.0.sodium_mg > 550%}   
+            <div class="alert alert-danger d-flex align-items-center mt-3" role="alert">
+                <div>
+                    This food contains an high amount of sodium. High Sodium cuases Sever dehydration and water
+                    retention.
+                </div>
+            </div>
+            {%endif%}
+
+            {%if api.0.sugar_g > 36%}   
+            <div class="alert alert-danger d-flex align-items-center mt-3" role="alert">
+                <div>
+                    This food contains an high amount of sugar. An excess of sweetened foods and beverages can lead to weight gain, blood sugar problems, and an increased risk of heart disease, among other dangerous conditions.
+                </div>
+            </div>
+            {%endif%}
+
+            {%if api.0.cholesterol_mg > 300%}   
+            <div class="alert alert-danger d-flex align-items-center mt-3" role="alert">
+                <div>
+                    This food contains an high amount of cholesterol. Your body needs cholesterol to build healthy cells, but high levels of cholesterol can increase your risk of heart disease.  
+                </div>
+            </div>
+            {%endif%}
+
+            {%if api.0.fat_total_g > 24.25%}   
+            <div class="alert alert-danger d-flex align-items-center mt-3" role="alert">
+                <div>
+                    This food contains an high amount of fat. High consumption of fat causes obesity, diabetes, heart disease, and possibly cancer, therefore low-fat diets are optimal.  
+                </div>
+            </div>
+            {%endif%}
+
+            {%if api.0.fat_saturated_g > 7.8%}   
+            <div class="alert alert-danger d-flex align-items-center mt-3" role="alert">
+                <div>
+                    This food contains an high amount of saturated fat. Eating too much saturated fats in your diet can raise "bad" LDL cholesterol in your blood, which can increase the risk of heart disease and stroke.
+                </div>
+            </div>
+            {%endif%}
+        </div>
+        <div class="box row justify-content-center mt-5 mb-5" >
+            <div class="col-md-10 caloriescont shadow rounded" style="background-color: #191919; color:white;">
+                <div class="row">
+
+                    <div class="col-md-6" style="background-color: #f7c546;">
+                        <h2 class="mt-3 mb-4">&nbsp;&nbsp;&nbsp;&nbsp;Nutritional Values </h2><span></span>
+                        <ul>
+                            <li class="servingsize">Serving Size per {{api.0.serving_size_g}}/Grams <span class="float-end"></span></li>
+                            <li>Carbohydrates: <span class="float-end">{{api.0.carbohydrates_total_g}}g</span>
+                            </li>
+                            <li>Cholesterol: <span class="float-end">{{api.0.cholesterol_mg}}mg</span></li>
+                            <li>Saturated fat: <span class="float-end">{{api.0.fat_saturated_g}}g</span></li>
+                            <li>Total Fat: <span class="float-end">{{api.0.fat_total_g}}g</span></li>
+                            <li>Fiber: <span class="float-end">{{api.0.fiber_g}}g</span></li>
+                            <li>Potassium:<span class="float-end">{{api.0.potassium_mg}}mg</span></li>
+                            <li>Protein: <span class="float-end">{{api.0.protein_g}}g<span></li>
+                            <li>Sodium:<span class="float-end">{{api.0.sodium_mg}}mg</span></li>
+                            <li>Sugar: <span class="float-end">{{api.0.sugar_g}}g</span></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6" style="background-color:#efefef; color: #191919">
+                        <h4 class="mt-3 mb-4" style="color: #000000;">To burn <strong>{{api.0.calories}}</strong>  calories you will have to</h4>
+                        <div class="d-flex align-items-center mb-5">
+                            <div class="flex-shrink-0">
+                                <img src="{% static 'images/running.png'%}" alt="...">
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h5 style="color: #f7c546;"> Jog </h5>
+                                <p>you will have to jog for <strong> {{api.0.calories|div:11.4|mul:1|floatformat:0}}</strong> Minutes</p>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center mb-5">
+                            <div class="flex-shrink-0">
+                                <img src="{% static 'images/yoga.png'%}" alt="...">
+                            </div>
+                            <div class="flex-grow-1 ms-4">
+                                <h5 style="color: #f7c546;"> Do Power Yoga </h5>
+                                <p>you will have to Power Yoga for <strong>{{api.0.calories|div:5|mul:1|floatformat:0}} </strong> Minutes</p>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center mb-5">
+                            <div class="flex-shrink-0">
+                                <img src="{% static 'images/weightlifter.png'%}" alt="...">
+                            </div>
+                            <div class="flex-grow-1 ms-4">
+                                <h5 style="color: #f7c546;">Get a Gym Workout </h5>
+                                <p>you will have to lift weight for <strong>
+                                    {{api.0.calories|div:6.25|mul:1|floatformat:0}} </strong> Minutes </p>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <div class="flex-shrink-0">
+                                <img src="{% static 'images/walking.png'%}" alt="...">
+                            </div>
+                            <div class="flex-grow-1 ms-1">
+                                <h5 style="color: #f7c546;"> Go for a Brisk Walk </h5>
+                                <p>you will have to brisk walk for <strong>
+                                    {{api.0.calories|div:5|mul:1|floatformat:0}} </strong> Minutes</p>
+                            </div>
+                        </div><br>
+                        <div class="d-flex align-items-center mb-5">
+                            <div class="flex-shrink-0">
+                                <img src="{% static 'images/swimming.png'%}" alt="...">
+                            </div>
+                            <div class="flex-grow-1 ms-4">
+                                <h5 style="color: #f7c546;">Go for a Swim</h5>
+                                <p>you will have to swim for<strong>
+                                    {{api.0.calories|div:6.67|mul:1|floatformat:0}} </strong> Minutes </p>
+                            </div>
+                        </div>
+                    </div> 
+                    <div>
+                        <canvas id="myChart" width="400" height="400"></canvas>
+                    </div>                       
+                </div>                       
+                </div>
+                
+            {%endif%}
+                {%endif%}
+            
+            </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.0.1/dist/chart.umd.min.js"></script>
+        <script>
+            const ctx = document.getElementById('myChart').getContext('2d');
+            const myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Carbohydrates', 'Cholesterol', 'Saturated_fat', 'Total_fat', 'Fiber', 'Potassium','Protein','Sodium','Sugar'],
+                    datasets: [{
+                    label: 'Nutrirional values of {{api.0.name }}',
+                    data: [
+                            '{{api.0.carbohydrates_total_g}}',
+                            '{{api.0.cholesterol_mg}}',
+                            '{{api.0.fat_saturated_g}}',
+                            '{{api.0.fat_total_g}}',
+                            '{{api.0.fiber_g}}',
+                            '{{api.0.potassium_mg}}',
+                            '{{api.0.protein_g}}',
+                            '{{api.0.sodium_mg}}',
+                            '{{api.0.sugar_g}}',
+                        ],
+                    backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                            'rgba(255, 159, 64, 0.2)'
+                        ],
+                    borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)'
+                        ],
+                    borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive:true,
+                    maintainAspectRatio:false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+            </script>
+        <script>
+            const ctx1 = document.getElementById('myChart1').getContext('2d');
+            const myChart1 = new Chart(ctx1, {
+                type: 'bar',
+                data: {
+                    labels: ['Carbohydrates', 'Cholesterol', 'Saturated_fat', 'Total_fat', 'Fiber', 'Potassium','Protein','Sodium','Sugar'],
+                    datasets: [{
+                    label: 'Nutrirional values of {{api.0.name }} ({{api.0.serving_size_g}} g)',
+                    data: [
+                            '{{api.0.carbohydrates_total_g}}',
+                            '{{api.0.cholesterol_mg}}',
+                            '{{api.0.fat_saturated_g}}',
+                            '{{api.0.fat_total_g}}',
+                            '{{api.0.fiber_g}}',
+                            '{{api.0.potassium_mg}}',
+                            '{{api.0.protein_g}}',
+                            '{{api.0.sodium_mg}}',
+                            '{{api.0.sugar_g}}',
+                        ],
+                    backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                            'rgba(255, 159, 64, 0.2)'
+                        ],
+                    borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)'
+                        ],
+                    borderWidth: 1
+                    },{
+                    label: 'Nutrirional values of {{api.1.name }} ({{api.1.serving_size_g}} g)',
+                    data: [
+                            '{{api.1.carbohydrates_total_g}}',
+                            '{{api.1.cholesterol_mg}}',
+                            '{{api.1.fat_saturated_g}}',
+                            '{{api.1.fat_total_g}}',
+                            '{{api.1.fiber_g}}',
+                            '{{api.1.potassium_mg}}',
+                            '{{api.1.protein_g}}',
+                            '{{api.1.sodium_mg}}',
+                            '{{api.1.sugar_g}}',
+                        ],
+                    backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                            'rgba(255, 159, 64, 0.2)'
+                        ],
+                    borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)'
+                        ],
+                    borderWidth: 1
+                    }
+                ]
+                },
+                options: {
+                    responsive:true,
+                    maintainAspectRatio:false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+            </script>
+             
+    </div>
+    </div>
+    </section>
+{% endblock %}

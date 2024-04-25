@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body %}
+<title>SimplFit - Workout List</title>
+<style>
+    .card-body {
+        background-color: #191919;
+        color: white;
+    }
+    video {
+    width: 280px;
+    height: 290px;
+    object-fit: cover;
+
+    }
+</style>
+
+<div class='py-0 mt-auto'>
+    <div class='container px-5'>
+        <div class="section-title">
+            <span>Workout List</span>
+            <h2>Workout List</h2>
+            </div>
+    
+        <div class='row justify-content-center'>
+                 
+        {% for workout in pages %}
+            <div class='col-sm-12 col-md-12 col-lg-4 col-xl-3 d-flex align-items-stretch'>
+                <div class='card bg-secondary mb-3'>
+                    
+                        <video class="embed-responsive embed-responsive-16by9" controls="controls" >
+                            <source src="{{ workout.video.video.url|default:'../../media/videos/no_image.png' }}" type="video/mp4" />
+                            </video>
+                    
+                    <div class='card-body'>
+                        <center>
+                        <h4 class='card-title'>
+                            
+                            <strong>{{ workout.workout_name }}</strong>
+                        </h4>
+
+                        <p class='card-text'>
+                            <div class='my-3'>
+                                
+                                Muscle Group: {{ workout.muscle_group }}
+                            </div>
+                        </p>
+
+                        <p class='card-text'>
+                            <div class='my-3'>
+                                
+                                Difficulty: {{ workout.difficulty}}
+                            </div>
+                        </p>
+
+                        <p class='card-text'>
+                            <div class='my-3'>
+                                
+                                <strong>Burns {{ workout.calories_burn}} calories</strong> in {{ workout.time|floatformat:0 }} minutes
+                            </div>
+                        </p>
+
+                        <p class='card-text'>
+                            <div class='my-3'>
+                                <a href="{% url 'workout_details' workout.id %}" type='button' class='btn btn-link' style="color:#f7c546;">
+                                    View details
+                                </a>
+                            </div>
+                        </p>
+                    </center>
+                    </div>
+
+                </div>
+            </div>
+
+        {% endfor %}
+
+        {% if pages.has_other_pages %}
+            <div class='d-flex justify-content-center'>
+                <ul class='pagination'>
+                    {% if pages.has_previous %}
+                        <li class='page-item'>
+                            <a class='page-link' href='?page={{ pages.previous_page_number }}'>&laquo;</a>
+                        </li>
+                    {% else %}
+                        <li class='page-item disabled'>
+                            <a class='page-link' href='#'>&laquo;</a>
+                        </li>
+                    {% endif %}
+                    {% for i in pages.paginator.page_range %}
+                        {% if pages.number == i %}
+                            <li class='page-item active'>
+                                <a class='page-link' href='#'>{{ i }}</a>
+                            </li>
+                        {% else %}
+                            <li class='page-item'>
+                                <a class='page-link' href='?page={{ i }}'>{{ i }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                    {% if pages.has_next %}
+                        <li class='page-item'>
+                            <a class='page-link' href='?page={{ pages.next_page_number }}'>&raquo;</a>
+                        </li>
+                    {% else %}
+                        <li class='page-item disabled'>
+                            <a class='page-link' href='#'>&raquo;</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}
+</body>
+</html>

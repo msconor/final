@@ -1,0 +1,726 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>SimplFit - Calorie Goal</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <link href="{%static 'assets\img\logo.png' %}" rel="icon">
+  <link href="{%static 'assets\img\logo.png' %}" rel="apple-touch-icon">
+
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  
+  <link href="{%static 'assets/vendor/aos/aos.css'%}" rel="stylesheet">
+  <link href="{%static 'assets/vendor/bootstrap/css/bootstrap.min.css'%}" rel="stylesheet">
+  <link href="{%static 'assets/vendor/bootstrap-icons/bootstrap-icons.css'%}" rel="stylesheet">
+  <link href="{%static 'assets/vendor/boxicons/css/boxicons.min.css'%}" rel="stylesheet">
+  <link href="{%static 'assets/vendor/glightbox/css/glightbox.min.css'%}" rel="stylesheet">
+  <link href="{%static 'assets/vendor/swiper/swiper-bundle.min.css'%}" rel="stylesheet">
+
+  <link href="{% static 'assets/css/style.css'%}" rel="stylesheet">
+
+</head>
+
+{% block body %}
+    <style>
+    .signup .card-body{
+            background-color: rgba(25, 25, 25, 0.95);
+        }
+
+    .signup .card .card-header{
+            background-color:#191919;
+        }
+
+    .signup .card{
+            color:rgba(255, 255, 255, 0.4);
+            border-color: #191919;
+        }
+    
+    .signup .form-group button{
+            background-color: #f7c546;
+            color: white;
+            border-color: #f7c546;
+        }
+    .signup .form-group  button[type="reset"]{
+            background-color: rgba(255, 255, 255, 0.4);
+            color: white;
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+    .signup a{
+        background-color: #f7c546;
+        border-color: #f7c546;
+        color: white;
+    }
+    .signup a:hover{
+        background-color: #f7c546;
+        color: #191919;
+    }
+    </style>
+
+<div class="signup">
+<div class='py-4 mt-auto'>
+    <div class='container px-4'>
+        <div class="section-title">
+            <span>Set Calorie Goal</span>
+            <h2>Set Calorie Goal</h2></div>
+
+        {% if success %}
+            <br>
+            <div class='alert alert-dismissible alert-success' role='alert'>
+                <button type='button' class='btn-close' data-bs-dismiss='alert'></button>
+                The calorie goal set successfully.
+            </div>
+        {% else %} 
+                <div class='row'>
+                    <div class='col-lg-6 offset-lg-3'>
+                        <div class='card bg-secondary mb-3'>
+                            <div class='card-body'>
+    
+                                <div class='form-group'>
+                                    <form action="{% url 'food_goal' %}"  method='POST' enctype='multipart/form-data' onsubmit="myFunction();">
+                                        {% csrf_token %}
+                                        <div class='form-group'>
+                                            
+                                            <div class='row'>
+                                            <div class='col-5'>
+                                                <label for='age' class='form-label mt-2'>
+                                                   Age
+                                                </label>
+                                                <input 
+                                                    class='form-control' type='number' name='age' id='age'
+                                                    placeholder='0' required>
+                                            </div>
+
+                                            <div class='col-5'>
+                                                <label for='gender' class='form-label mt-2'>
+                                                   Gender
+                                                </label>
+                                                <select name="gender" id="gender" class='form-control'  required>
+                                                    <option hidden="" disabled="disabled" selected="selected" value="">Select Gender</option>
+                                                    <option value="male">Male</option>
+                                                    <option value="female">Female</option>
+                                                 </select>
+                                            </div></div>
+                                            <div class='row'>
+                                            <div class='col-5'>
+                                                <label for='weight' class='form-label mt-2'>
+                                                   Weight (in kg)
+                                                </label>
+                                                <input 
+                                                    class='form-control' type='number' name='weight' id='weight'
+                                                    placeholder='0' required>
+                                            </div>
+
+                                            <div class='col-5'>
+                                                <label for='height' class='form-label mt-2'>
+                                                    Height (in cm)
+                                                </label>
+                                                <input 
+                                                    class='form-control' type='number' name='height' id='height'
+                                                    placeholder='0' required>
+                                            </div></div>
+                                            <div class='col-5'>
+                                                <label for='goal' class='form-label mt-2'>
+                                                   Goal
+                                                </label>
+                                                <select name="goal1" id="goal" class='form-control'  required>
+                                                    <option hidden="" disabled="disabled" selected="selected" value="">Select Goal</option>
+                                                    <option value="loss">Weight Loss</option>
+                                                    <option value="maintain">Maintain Weight</option>
+                                                    <option value="gain">Weight Gain</option>
+                                                 </select>
+                                            </div>
+                                             <div class='col-10'>
+                                                <label for='activity' class='form-label mt-2'>
+                                                    Activity level:
+                                                </label>
+                                                <p>
+                                                    &nbsp; <input type="radio" id="light" name="workout" value="light" required>
+                                                    <label for="light" style="color: white;">Light (active for 1 - 3 days/week)</label><br>&nbsp;
+                                                    <input type="radio" id="moderate" name="workout" value="moderate">
+                                                    <label for="moderate" style="color: white;">Moderate (active for 3 - 5 days/week)</label><br> &nbsp;
+                                                    <input type="radio" id="heavy" name="workout" value="heavy">
+                                                    <label for="heavy" style="color: white;">Heavy (active for 6 - 7 days/week)</label> &nbsp;
+                                                    <input type="radio" id="none" name="workout" value="none"> <label for="none" style="color: white;">None</label></p> 
+                                            </div>
+                                            <div class='row'>
+                                                <div class='col-10'>
+                                            <div id="tutorial">
+                                                <p>Weight Loss Time Period:<br>
+                                                &nbsp;&nbsp;<input type="radio" id="0.5L" name="goal" value="0.5L">
+                                                <label for="not_preg" style="color: white;">Loss 0.5 kg per week </label>&nbsp;
+                                                <input type="radio" id="0.8L" name="goal" value="0.8L">
+                                                <label for="preg" style="color: white;">Loss 0.8 kg per week</label><br>&nbsp;
+                                                <input type="radio" id="1.0L" name="goal" value="1.0L">
+                                                <label for="lact" style="color: white;">Loss 1.0 kg per week</label></p>
+                                            </div>
+                                            <div id="tutorial1">
+                                                <p>Weight Gain Time Period:<br>
+                                                &nbsp;&nbsp;<input type="radio" id="0.5L" name="goal" value="0.5G">
+                                                <label for="not_preg" style="color: white;">Gain 0.5 kg per week </label>&nbsp;
+                                                <input type="radio" id="0.8L" name="goal" value="0.8G">
+                                                <label for="preg" style="color: white;">Gain 0.8 kg per week</label><br>&nbsp;
+                                                <input type="radio" id="1.0L" name="goal" value="1.0G">
+                                                <label for="lact" style="color: white;">Gain 1.0 kg per week</label></p>
+                                            </div>    
+                                        </div>
+                                            <div class='col-10'>
+                                            </div></div>
+                                        <script>
+                                            const el = document.getElementById('goal');
+                                            const box = document.getElementById('tutorial');
+                                            const box1 = document.getElementById('tutorial1');
+                                            el.addEventListener('change', function handleChange(event) {
+                                               if (event.target.value === 'loss') {
+                                                  box.style.visibility = 'visible';
+                                                  box1.style.visibility = 'hidden';
+                                               }else if(event.target.value === 'gain'){
+                                                  box1.style.visibility = 'visible';
+                                                  box.style.visibility = 'hidden';
+                                               } else {
+                                                  box.style.visibility = 'hidden';
+                                                  box1.style.visibility = 'hidden';
+                                               }
+                                            });
+                                         </script>
+                                            
+                                            
+                                            <center><button type='submit' class='btn btn-primary'>Save</button>
+                                            <button type="reset" class='btn btn-primary' id="myForm" onclick="reset()">Reset</button></center>
+                                        </div>
+                                    </form>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        {% endif %}
+    </div>
+    </div>
+</div>
+{% endblock %}
+
+<script>
+    var x1 = localStorage.getItem("weight");
+    document.getElementById("weight").value=x1;
+    var x11 = localStorage.getItem("height");
+    document.getElementById("height").value=x11;
+   function myFunction() {
+    var a = document.getElementById("age").value;
+	var e = document.getElementById("gender")
+	var select_option = e.options[e.selectedIndex].value;
+    var g = document.getElementById("goal")
+	var select_option1 = g.options[g.selectedIndex].value;
+    var store = localStorage.setItem("goal",select_option1);
+		{
+			var ele = document.getElementsByName('workout');
+			  for(i = 0; i < ele.length; i++) {
+				  if(ele[i].checked)
+				 var x = ele[i].value;
+			  }
+            var ele = document.getElementsByName('goal');
+			  for(i = 0; i < ele.length; i++) {
+				  if(ele[i].checked)
+				 var go = ele[i].value;
+			  }
+    if(select_option == "male" && x == "light"){
+        
+        if(select_option1=="loss"){
+            if(go=="0.5L"){
+            var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value+5;
+	        var calorie = localStorage.setItem("calorie_goal", (Math.round(c*1.375)-300));
+            var c1 = Math.round(c*1.375)-300;
+            var cb = (c1*0.2);
+            var calorie_burn = localStorage.setItem("calorie_burn", cb );
+            }else if(go=="0.8L"){
+            var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value+5;
+	        var calorie = localStorage.setItem("calorie_goal", (Math.round(c*1.375)-500));
+            var c1 = Math.round(c*1.375)-500;
+            var cb =(c1*0.3);
+            var calorie_burn = localStorage.setItem("calorie_burn", cb );
+            }else if(go=="1.0L"){
+            var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value+5;
+	        var calorie = localStorage.setItem("calorie_goal", (Math.round(c*1.375)-800));
+            var c1 = Math.round(c*1.375)-800;
+            var cb =(c1*0.4);
+            var calorie_burn = localStorage.setItem("calorie_burn", cb );
+            }else{
+            var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value+5;
+	        var calorie = localStorage.setItem("calorie_goal", (Math.round(c*1.375)-800));
+            
+        }
+        }else if(select_option1=="maintain"){
+        var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value+5;
+	    var calorie = localStorage.setItem("calorie_goal", Math.round(c*1.375));
+        var c1 = Math.round(c*1.375);
+        var cb = (c1*0.1);
+        var calorie_burn = localStorage.setItem("calorie_burn", cb );
+        }else if(select_option1=="gain"){
+            if(go=="0.5G"){
+            var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value+5;
+	        var calorie = localStorage.setItem("calorie_goal", (Math.round(c*1.375)+300));
+            var c1 = Math.round(c*1.375);
+            var cb = (c1*0.2);
+            var calorie_burn = localStorage.setItem("calorie_burn", cb );
+            }else if(go=="0.8G"){
+            var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value+5;
+	        var calorie = localStorage.setItem("calorie_goal", (Math.round(c*1.375)+500));
+            var c1 = Math.round(c*1.375);
+            var cb =(c1*0.3);
+            var calorie_burn = localStorage.setItem("calorie_burn", cb );
+            }else if(go=="1.0G"){
+            var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value+5;
+	        var calorie = localStorage.setItem("calorie_goal", (Math.round(c*1.375)+800));
+            var c1 = Math.round(c*1.375);
+            var cb =(c1*0.4);
+            var calorie_burn = localStorage.setItem("calorie_burn", cb );
+            }else{
+            var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value+5;
+	        var calorie = localStorage.setItem("calorie_goal", (Math.round(c*1.375)-800));
+            var c1 = Math.round(c*1.375)+500;
+            var cb =(c1*0.2);
+            var calorie_burn = localStorage.setItem("calorie_burn", cb );
+        }
+        }else{
+        var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value+5;
+	    var calorie = localStorage.setItem("calorie_goal", Math.round(c*1.375));
+        }
+        
+    }else if((select_option == "female" && x == "light")){
+        if(select_option1=="loss"){
+            if(go=="0.5L"){
+            var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value-161;
+	        var calorie = localStorage.setItem("calorie_goal", (Math.round(c*1.375)-300));
+            var c1 = Math.round(c*1.375)-300;
+            var cb = (c1*0.2);
+            var calorie_burn = localStorage.setItem("calorie_burn", cb );
+            }else if(go=="0.8L"){
+            var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value-161;
+	        var calorie = localStorage.setItem("calorie_goal", (Math.round(c*1.375)-500));
+            var c1 = Math.round(c*1.375)-500;
+            var cb =(c1*0.3);
+            var calorie_burn = localStorage.setItem("calorie_burn", cb );
+            }else if(go=="1.0L"){
+            var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value-161;
+	        var calorie = localStorage.setItem("calorie_goal", (Math.round(c*1.375)-800));
+            var c1 = Math.round(c*1.375)-800;
+            var cb =(c1*0.4);
+            var calorie_burn = localStorage.setItem("calorie_burn", cb );
+            }else{
+            var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value-161;
+	        var calorie = localStorage.setItem("calorie_goal", (Math.round(c*1.375)-800)); 
+        }
+        }else if(select_option1=="maintain"){
+        var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value-161;
+	    var calorie = localStorage.setItem("calorie_goal", Math.round(c*1.375));
+        var c1 = Math.round(c*1.375);
+        var cb = (c1*0.1);
+        var calorie_burn = localStorage.setItem("calorie_burn", cb );
+        }else if(select_option1=="gain"){
+            if(go=="0.5G"){
+            var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value-161;
+	        var calorie = localStorage.setItem("calorie_goal", (Math.round(c*1.375)+300));
+            var c1 = Math.round(c*1.375);
+            var cb = (c1*0.2);
+            var calorie_burn = localStorage.setItem("calorie_burn", cb );
+            }else if(go=="0.8G"){
+            var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value-161;
+	        var calorie = localStorage.setItem("calorie_goal", (Math.round(c*1.375)+500));
+            var c1 = Math.round(c*1.375);
+            var cb =(c1*0.3);
+            var calorie_burn = localStorage.setItem("calorie_burn", cb );
+            }else if(go=="1.0G"){
+            var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value-161;
+	        var calorie = localStorage.setItem("calorie_goal", (Math.round(c*1.375)+800));
+            var c1 = Math.round(c*1.375);
+            var cb =(c1*0.4);
+            var calorie_burn = localStorage.setItem("calorie_burn", cb );
+            }else{
+            var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value-161;
+	        var calorie = localStorage.setItem("calorie_goal", (Math.round(c*1.375)+800));
+        }
+        }else{
+        var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value-161;
+	    var calorie = localStorage.setItem("calorie_goal", Math.round(c*1.375));
+        }
+    
+    }
+    
+    
+    else if((select_option == "male" && x == "moderate")){
+        if(select_option1=="loss"){
+
+            if(go=="0.5L"){
+            var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value+5;
+	        var calorie = localStorage.setItem("calorie_goal", (Math.round(c*1.55)-300));
+            var c1 = Math.round(c*1.55)-300;
+            var cb = (c1*0.2);
+            var calorie_burn = localStorage.setItem("calorie_burn", cb );
+            }else if(go=="0.8L"){
+            var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value+5;
+	        var calorie = localStorage.setItem("calorie_goal", (Math.round(c*1.55)-500));
+            var c1 = Math.round(c*1.55)-500;
+            var cb =(c1*0.3);
+            var calorie_burn = localStorage.setItem("calorie_burn", cb );
+            }else if(go=="1.0L"){
+            var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value+5;
+	        var calorie = localStorage.setItem("calorie_goal", (Math.round(c*1.55)-800));
+            var c1 = Math.round(c*1.55)-800;
+            var cb =(c1*0.4);
+            var calorie_burn = localStorage.setItem("calorie_burn", cb );
+            }else{
+            var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value+5;
+	        var calorie = localStorage.setItem("calorie_goal", (Math.round(c*1.55)-800));
+            
+        }
+        }else if(select_option1=="maintain"){
+        var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value+5;
+	    var calorie = localStorage.setItem("calorie_goal", Math.round(c*1.55));
+        var c1 = Math.round(c*1.55);
+        var cb = (c1*0.1);
+        var calorie_burn = localStorage.setItem("calorie_burn", cb );
+            
+        }else if(select_option1=="gain"){
+            if(go=="0.5G"){
+            var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value+5;
+	        var calorie = localStorage.setItem("calorie_goal", (Math.round(c*1.55)+300));
+            var c1 = Math.round(c*1.55);
+            var cb = (c1*0.2);
+            var calorie_burn = localStorage.setItem("calorie_burn", cb );
+            }else if(go=="0.8G"){
+            var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value+5;
+	        var calorie = localStorage.setItem("calorie_goal", (Math.round(c*1.55)+500));
+            var c1 = Math.round(c*1.55);
+            var cb =(c1*0.3);
+            var calorie_burn = localStorage.setItem("calorie_burn", cb );
+            }else if(go=="1.0G"){
+            var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value+5;
+	        var calorie = localStorage.setItem("calorie_goal", (Math.round(c*1.55)+800));
+            var c1 = Math.round(c*1.55);
+            var cb =(c1*0.4);
+            var calorie_burn = localStorage.setItem("calorie_burn", cb );
+            }else{
+            var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value+5;
+	        var calorie = localStorage.setItem("calorie_goal", (Math.round(c*1.55)-800));
+        }
+        }else{
+            var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value+5;
+	        var calorie = localStorage.setItem("calorie_goal", Math.round(c*1.55));
+        }
+    
+    }
+    
+    else if((select_option == "female" && x == "moderate")){
+        if(select_option1=="loss"){
+            if(go=="0.5L"){
+            var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value-161;
+	        var calorie = localStorage.setItem("calorie_goal", (Math.round(c*1.55)-300));
+            var c1 = Math.round(c*1.55)-300;
+            var cb = (c1*0.2);
+            var calorie_burn = localStorage.setItem("calorie_burn", cb );
+            }else if(go=="0.8L"){
+            var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value-161;
+	        var calorie = localStorage.setItem("calorie_goal", (Math.round(c*1.55)-500));
+            var c1 = Math.round(c*1.55)-500;
+            var cb =(c1*0.3);
+            var calorie_burn = localStorage.setItem("calorie_burn", cb );
+            }else if(go=="1.0L"){
+            var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value-161;
+	        var calorie = localStorage.setItem("calorie_goal", (Math.round(c*1.55)-800));
+            var c1 = Math.round(c*1.55)-800;
+            var cb =(c1*0.4);
+            var calorie_burn = localStorage.setItem("calorie_burn", cb );
+            }else{
+            var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value-161;
+	        var calorie = localStorage.setItem("calorie_goal", (Math.round(c*1.55)-800)); 
+        }
+        }else if(select_option1=="maintain"){
+        var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value-161;
+	    var calorie = localStorage.setItem("calorie_goal", Math.round(c*1.55));
+        var c1 = Math.round(c*1.55);
+        var cb = (c1*0.1);
+        var calorie_burn = localStorage.setItem("calorie_burn", cb );
+        }else if(select_option1=="gain"){
+            if(go=="0.5G"){
+            var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value-161;
+	        var calorie = localStorage.setItem("calorie_goal", (Math.round(c*1.55)+300));
+            var c1 = Math.round(c*1.55);
+            var cb = (c1*0.2);
+            var calorie_burn = localStorage.setItem("calorie_burn", cb );
+            }else if(go=="0.8G"){
+            var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value-161;
+	        var calorie = localStorage.setItem("calorie_goal", (Math.round(c*1.55)+500));
+            var c1 = Math.round(c*1.55);
+            var cb =(c1*0.3);
+            var calorie_burn = localStorage.setItem("calorie_burn", cb );
+            }else if(go=="1.0G"){
+            var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value-161;
+	        var calorie = localStorage.setItem("calorie_goal", (Math.round(c*1.55)+800));
+            var c1 = Math.round(c*1.55);
+            var cb =(c1*0.4);
+            var calorie_burn = localStorage.setItem("calorie_burn", cb );
+            }else{
+            var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value-161;
+	        var calorie = localStorage.setItem("calorie_goal", (Math.round(c*1.55)-800));
+        }
+        }else{
+        var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value-161;
+	    var calorie = localStorage.setItem("calorie_goal", Math.round(c*1.55));
+        }
+    }
+    
+    
+    
+    else if((select_option == "male" && x == "heavy")){
+        if(select_option1=="loss"){
+
+            if(go=="0.5L"){
+            var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value+5;
+	        var calorie = localStorage.setItem("calorie_goal", (Math.round(c*1.725)-300));
+            var c1 = Math.round(c*1.725)-300;
+            var cb = (c1*0.2);
+            var calorie_burn = localStorage.setItem("calorie_burn", cb );
+            }else if(go=="0.8L"){
+            var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value+5;
+	        var calorie = localStorage.setItem("calorie_goal", (Math.round(c*1.725)-500));
+            var c1 = Math.round(c*1.725)-500;
+            var cb =(c1*0.3);
+            var calorie_burn = localStorage.setItem("calorie_burn", cb );
+            }else if(go=="1.0L"){
+            var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value+5;
+	        var calorie = localStorage.setItem("calorie_goal", (Math.round(c*1.725)-800));
+            var c1 = Math.round(c*1.725)-800;
+            var cb =(c1*0.4);
+            var calorie_burn = localStorage.setItem("calorie_burn", cb );
+            }else{
+            var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value+5;
+	        var calorie = localStorage.setItem("calorie_goal", (Math.round(c*1.725)-800));   
+        }
+        }else if(select_option1=="maintain"){
+        var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value+5;
+	    var calorie = localStorage.setItem("calorie_goal", Math.round(c*1.725));
+        var c1 = Math.round(c*1.725);
+        var cb = (c1*0.1);
+        var calorie_burn = localStorage.setItem("calorie_burn", cb );
+            
+        }else if(select_option1=="gain"){
+            if(go=="0.5G"){
+            var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value+5;
+	        var calorie = localStorage.setItem("calorie_goal", (Math.round(c*1.725)+300));
+            var c1 = Math.round(c*1.725);
+            var cb = (c1*0.2);
+            var calorie_burn = localStorage.setItem("calorie_burn", cb );
+            }else if(go=="0.8G"){
+            var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value+5;
+	        var calorie = localStorage.setItem("calorie_goal", (Math.round(c*1.725)+500));
+            var c1 = Math.round(c*1.725);
+            var cb =(c1*0.3);
+            var calorie_burn = localStorage.setItem("calorie_burn", cb );
+            }else if(go=="1.0G"){
+            var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value+5;
+	        var calorie = localStorage.setItem("calorie_goal", (Math.round(c*1.725)+800));
+            var c1 = Math.round(c*1.725);
+            var cb =(c1*0.4);
+            var calorie_burn = localStorage.setItem("calorie_burn", cb );
+            }else{
+            var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value+5;
+	        var calorie = localStorage.setItem("calorie_goal", (Math.round(c*1.725)-800));
+        }
+        }else{
+            var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value+5;
+	        var calorie = localStorage.setItem("calorie_goal", Math.round(c*1.725));
+        }
+    }else if((select_option == "female" && x == "heavy")){
+        if(select_option1=="loss"){
+            if(go=="0.5L"){
+            var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value-161;
+	        var calorie = localStorage.setItem("calorie_goal", (Math.round(c*1.725)-300));
+            var c1 = Math.round(c*1.725)-300;
+            var cb = (c1*0.2);
+            var calorie_burn = localStorage.setItem("calorie_burn", cb );
+            }else if(go=="0.8L"){
+            var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value-161;
+	        var calorie = localStorage.setItem("calorie_goal", (Math.round(c*1.725)-500));
+            var c1 = Math.round(c*1.725)-500;
+            var cb =(c1*0.3);
+            var calorie_burn = localStorage.setItem("calorie_burn", cb );
+            }else if(go=="1.0L"){
+            var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value-161;
+	        var calorie = localStorage.setItem("calorie_goal", (Math.round(c*1.725)-800));
+            var c1 = Math.round(c*1.725)-800;
+            var cb =(c1*0.4);
+            var calorie_burn = localStorage.setItem("calorie_burn", cb );
+            }else{
+            var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value-161;
+	        var calorie = localStorage.setItem("calorie_goal", (Math.round(c*1.725)-800)); 
+        }
+        }else if(select_option1=="maintain"){
+        var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value-161;
+	    var calorie = localStorage.setItem("calorie_goal", Math.round(c*1.725));
+        var c1 = Math.round(c*1.725);
+        var cb = (c1*0.1);
+        var calorie_burn = localStorage.setItem("calorie_burn", cb );
+        }else if(select_option1=="gain"){
+            if(go=="0.5G"){
+            var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value-161;
+	        var calorie = localStorage.setItem("calorie_goal", (Math.round(c*1.725)+300));
+            var c1 = Math.round(c*1.725);
+            var cb = (c1*0.2);
+            var calorie_burn = localStorage.setItem("calorie_burn", cb );
+            }else if(go=="0.8G"){
+            var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value-161;
+	        var calorie = localStorage.setItem("calorie_goal", (Math.round(c*1.725)+500));
+            var c1 = Math.round(c*1.725);
+            var cb =(c1*0.3);
+            var calorie_burn = localStorage.setItem("calorie_burn", cb );
+            }else if(go=="1.0G"){
+            var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value-161;
+	        var calorie = localStorage.setItem("calorie_goal", (Math.round(c*1.725)+800));
+            var c1 = Math.round(c*1.725);
+            var cb =(c1*0.4);
+            var calorie_burn = localStorage.setItem("calorie_burn", cb );
+            }else{
+            var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value-161;
+	        var calorie = localStorage.setItem("calorie_goal", (Math.round(c*1.725)-800));
+        }
+        }else{
+        var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value-161;
+	    var calorie = localStorage.setItem("calorie_goal", Math.round(c*1.725));
+        }
+    }else if((select_option == "male" && x == "none")){
+        if(select_option1=="loss"){
+
+            if(go=="0.5L"){
+            var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value+5;
+	        var calorie = localStorage.setItem("calorie_goal", (Math.round(c*1.2)-300));
+            var c1 = Math.round(c*1.2)-300;
+            var cb = (c1*0.2);
+            var calorie_burn = localStorage.setItem("calorie_burn", cb );
+            }else if(go=="0.8L"){
+            var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value+5;
+	        var calorie = localStorage.setItem("calorie_goal", (Math.round(c*1.2)-500));
+            var c1 = Math.round(c*1.2)-500;
+            var cb =(c1*0.3);
+            var calorie_burn = localStorage.setItem("calorie_burn", cb );
+            }else if(go=="1.0L"){
+            var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value+5;
+	        var calorie = localStorage.setItem("calorie_goal", (Math.round(c*1.2)-800));
+            var c1 = Math.round(c*1.2)-800;
+            var cb =(c1*0.4);
+            var calorie_burn = localStorage.setItem("calorie_burn", cb );
+            }else{
+            var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value+5;
+	        var calorie = localStorage.setItem("calorie_goal", (Math.round(c*1.2)-800));
+            
+        }
+        }else if(select_option1=="maintain"){
+        var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value+5;
+	    var calorie = localStorage.setItem("calorie_goal", Math.round(c*1.2));
+        var c1 = Math.round(c*1.2);
+        var cb = (c1*0.1);
+        var calorie_burn = localStorage.setItem("calorie_burn", cb );
+            
+        }else if(select_option1=="gain"){
+            if(go=="0.5G"){
+            var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value+5;
+	        var calorie = localStorage.setItem("calorie_goal", (Math.round(c*1.2)+300));
+            var c1 = Math.round(c*1.2);
+            var cb = (c1*0.2);
+            var calorie_burn = localStorage.setItem("calorie_burn", cb );
+            }else if(go=="0.8G"){
+            var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value+5;
+	        var calorie = localStorage.setItem("calorie_goal", (Math.round(c*1.2)+500));
+            var c1 = Math.round(c*1.2);
+            var cb =(c1*0.3);
+            var calorie_burn = localStorage.setItem("calorie_burn", cb );
+            }else if(go=="1.0G"){
+            var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value+5;
+	        var calorie = localStorage.setItem("calorie_goal", (Math.round(c*1.2)+800));
+            var c1 = Math.round(c*1.2);
+            var cb =(c1*0.4);
+            var calorie_burn = localStorage.setItem("calorie_burn", cb );
+            }else{
+            var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value+5;
+	        var calorie = localStorage.setItem("calorie_goal", (Math.round(c*1.2)-800));
+        }
+        }else{
+            var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value+5;
+	        var calorie = localStorage.setItem("calorie_goal", Math.round(c*1.2));
+        }
+    }else if((select_option == "female" && x == "none")){
+        if(select_option1=="loss"){
+            if(go=="0.5L"){
+            var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value-161;
+	        var calorie = localStorage.setItem("calorie_goal", (Math.round(c*1.2)-300));
+            var c1 = Math.round(c*1.2)-300;
+            var cb = (c1*0.2);
+            var calorie_burn = localStorage.setItem("calorie_burn", cb );
+            }else if(go=="0.8L"){
+            var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value-161;
+	        var calorie = localStorage.setItem("calorie_goal", (Math.round(c*1.2)-500));
+            var c1 = Math.round(c*1.2)-500;
+            var cb =(c1*0.3);
+            var calorie_burn = localStorage.setItem("calorie_burn", cb );
+            }else if(go=="1.0L"){
+            var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value-161;
+	        var calorie = localStorage.setItem("calorie_goal", (Math.round(c*1.2)-800));
+            var c1 = Math.round(c*1.2)-800;
+            var cb =(c1*0.4);
+            var calorie_burn = localStorage.setItem("calorie_burn", cb );
+            }else{
+            var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value-161;
+	        var calorie = localStorage.setItem("calorie_goal", (Math.round(c*1.2)-800)); 
+        }
+        }else if(select_option1=="maintain"){
+        var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value-161;
+	    var calorie = localStorage.setItem("calorie_goal", Math.round(c*1.2));
+        var c1 = Math.round(c*1.2);
+        var cb = (c1*0.1);
+        var calorie_burn = localStorage.setItem("calorie_burn", cb );
+        }else if(select_option1=="gain"){
+            if(go=="0.5G"){
+            var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value-161;
+	        var calorie = localStorage.setItem("calorie_goal", (Math.round(c*1.2)+300));
+            var c1 = Math.round(c*1.2);
+            var cb = (c1*0.2);
+            var calorie_burn = localStorage.setItem("calorie_burn", cb );
+            }else if(go=="0.8G"){
+            var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value-161;
+	        var calorie = localStorage.setItem("calorie_goal", (Math.round(c*1.2)+500));
+            var c1 = Math.round(c*1.2);
+            var cb =(c1*0.3);
+            var calorie_burn = localStorage.setItem("calorie_burn", cb );
+            }else if(go=="1.0G"){
+            var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value-161;
+	        var calorie = localStorage.setItem("calorie_goal", (Math.round(c*1.2)+800));
+            var c1 = Math.round(c*1.2);
+            var cb =(c1*0.4);
+            var calorie_burn = localStorage.setItem("calorie_burn", cb );
+            }else{
+            var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value-161;
+	        var calorie = localStorage.setItem("calorie_goal", (Math.round(c*1.2)-800));
+        }
+        }else{
+        var c =9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value-161;
+	    var calorie = localStorage.setItem("calorie_goal", Math.round(c*1.2));
+        }
+    }else{
+    var c = 9.99*document.getElementById("weight").value+6.25* document.getElementById("height").value-4.92*document.getElementById("age").value+5;
+	var calorie = localStorage.setItem("calorie_goal", Math.round(c));
+    var calorie_burn = localStorage.setItem("calorie_burn", 500 );
+    }
+}
+		
+   } 
+   function reset(){
+  document.getElementById("myForm").reset();
+}
+  </script>

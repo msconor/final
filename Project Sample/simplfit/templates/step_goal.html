@@ -1,0 +1,232 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>SimplFit - Step Calculator</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <link href="{%static 'assets\img\logo.png' %}" rel="icon">
+  <link href="{%static 'assets\img\logo.png' %}" rel="apple-touch-icon">
+
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  
+  <link href="{%static 'assets/vendor/aos/aos.css'%}" rel="stylesheet">
+  <link href="{%static 'assets/vendor/bootstrap/css/bootstrap.min.css'%}" rel="stylesheet">
+  <link href="{%static 'assets/vendor/bootstrap-icons/bootstrap-icons.css'%}" rel="stylesheet">
+  <link href="{%static 'assets/vendor/boxicons/css/boxicons.min.css'%}" rel="stylesheet">
+  <link href="{%static 'assets/vendor/glightbox/css/glightbox.min.css'%}" rel="stylesheet">
+  <link href="{%static 'assets/vendor/swiper/swiper-bundle.min.css'%}" rel="stylesheet">
+
+  <link href="{% static 'assets/css/style.css'%}" rel="stylesheet">
+
+</head>
+
+{% block body %}
+    <style>
+    .signup .card-body{
+            background-color: rgba(25, 25, 25, 0.95);
+        }
+
+    .signup .card .card-header{
+            background-color:#191919;
+        }
+
+    .signup .card{
+            color:rgba(255, 255, 255, 0.6);
+            border-color: #191919;
+        }
+    
+    .signup .form-group button{
+            background-color: #f7c546;
+            color: white;
+            border-color: #f7c546;
+        }
+    .signup .form-group  button[type="reset"]{
+            background-color: rgba(255, 255, 255, 0.6);
+            color: white;
+            border-color: rgba(255, 255, 255, 0.6);
+        }
+    .signup a{
+        background-color: #f7c546;
+        border-color: #f7c546;
+        color: white;
+    }
+    .signup a:hover{
+        background-color: #f7c546;
+        color: #191919;
+    }
+    </style>
+
+<div class="signup">
+<div class='py-4 mt-auto'>
+    <div class='container px-4'>
+        <div class="section-title">
+            <span>Calculator</span>
+            <h2>Steps Calculator</h2>
+            <p>Calculate your steps and calories burned</p>
+            </div>
+
+        {% if success %}
+            <br>
+            <div class='alert alert-dismissible alert-success' role='alert'>
+                <button type='button' class='btn-close' data-bs-dismiss='alert'></button>
+                The step goal set successfully.
+            </div>
+        {% else %} 
+        
+                <div class='row'>
+                    <div class='col-lg-6 offset-lg-3'>
+                        <div class='card bg-secondary mb-3'>
+                            <div class='card-body'>
+                                <div class='form-group'>
+                                   <form action="{% url 'step_goal' %}"  method='POST' enctype='multipart/form-data' onsubmit="myFunction();">
+                                        {% csrf_token %}
+                                        <div class='form-group'>
+                                           
+                                            <div class='col-8'>
+                                                <label for='goal' class='form-label mt-2'>
+                                                    Select One
+                                                </label>
+                                                <select name="goal1" id="goal" class='form-control'  required>
+                                                    <option hidden="" disabled="disabled" selected="selected" value="">Select One</option>
+                                                    <option value="Kms">Steps</option>
+                                                    <option value="Steps">Kms</option>
+                                                    </select>
+                                                </div>
+                                            <div class="row">
+                                            <div class='col-5' id="tutorial1">
+                                                <label for='Steps_count' class='form-label mt-2' style="color: white;">
+                                                Steps Count
+                                                </label>
+                                                <input
+                                                    class='form-control' type='number' name='steps' id='steps' placeholder="0">
+                                            </div>
+                                           
+                                            <div class='col-5' id="tutorial">
+                                                <label for='kms' class='form-label mt-2' style="color: white;">
+                                                Kilometers
+                                                </label>
+                                                <input
+                                                    class='form-control' type='number' name='kms' id='kms' placeholder="0" step="0.01">
+                                            </div></div>
+                                            <div class="row">
+                                                <div class='col-5' id="tutorial1">
+                                                    <label for='Steps_count' class='form-label mt-2' style="color: white;">
+                                                    Weight (in kgs)
+                                                    </label>
+                                                    <input
+                                                        class='form-control' type='number' name='weight' id='weight' placeholder="0" required>
+                                                </div>
+                                                <div class='col-5'>
+                                                    <label for='height' class='form-label mt-2' style="color: white;">
+                                                       Height (in cms)
+                                                    </label>
+                                                    <input 
+                                                        class='form-control' type='number' name='height' id='height' placeholder='0' required>
+                                                    </div></div>
+                                                <div class='col-8'>
+                                                    <label for='height' class='form-label mt-2' style="color: white;">
+                                                       Activity
+                                                    </label>                                          
+                                                    <select class='form-control' id = 'MET' name='MET' required>
+                                                        <option hidden="" disabled="disabled" selected="selected" value="">Select One</option>
+                                                        <option value="2.5">Slow Walk (2.5 mph)</option>
+                                                        <option value="2.0">Brisk Walk (3 mph)</option>
+                                                        <option value="1.5">Jog (3.5 mph)</option>
+                                                        <option value="1.0">Run (4 mph)</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class='row'>
+                            
+                                            <center><br><button type='submit' class='btn btn-primary'>Save</button>
+                                            <button type="reset" class='btn btn-primary' id="myForm" onclick="reset()">Reset</button></center>
+                                        </div>
+                                    </form>
+                                </div></center>
+                                <script>
+                                    var x = localStorage.getItem("weight");
+                                    document.getElementById("weight").value = x;
+                                    var x11 = localStorage.getItem("height");
+                                    document.getElementById("height").value = x11;
+                                    const el = document.getElementById('goal');
+                                    const box = document.getElementById('tutorial');
+                                    const box1 = document.getElementById('tutorial1');
+                                    el.addEventListener('change', function handleChange(event) {
+                                       if (event.target.value === 'Steps') {
+                                          box.style.visibility = 'visible';
+                                          box1.style.visibility = 'hidden';
+                                       }else if(event.target.value === 'Kms'){
+                                          box1.style.visibility = 'visible';
+                                          box.style.visibility = 'hidden';
+                                       } else {
+                                          box.style.visibility = 'hidden';
+                                          box1.style.visibility = 'hidden';
+                                       }
+                                    });
+                                 </script>
+                                <script>                                    
+                                    function myFunction() {
+                                    
+                                    var s = document.getElementById("steps").value;
+                                    var h = document.getElementById("height").value;
+                                    var k = document.getElementById("kms").value;
+                                    var w = document.getElementById("weight").value;
+                                    var s1 = h*0.414;
+                                    var s2 = ((s1*s)/100000);
+                                    var k2 = Math.round(k/(h*0.414)*100000);
+                                    var store = localStorage.setItem("Kms",s2+k);
+                                    var store0 = localStorage.setItem("Steps",k2+s);
+                                    var g = document.getElementById("goal");
+	                                var select_option = g.options[g.selectedIndex].value;
+                                    var g1 = document.getElementById("MET");
+	                                var select_option1 = g1.options[g1.selectedIndex].value;
+                                    var store1 = localStorage.setItem("measure",select_option)
+                                    var k3 = Math.round(k*select_option1*10) 
+                                    var k4 = Math.round(s2*select_option1*10) 
+                                    var store2 = localStorage.setItem("time",k3+k4);
+                                    if (select_option1=="2.5"){
+                                        var cal = Math.round((k3+k4)*2.0*w)/200;
+                                        var store3 = localStorage.setItem("mode","Slow Walking");
+                                        var store4 = localStorage.setItem("calorie_step",cal);
+                                    }else if(select_option1=="2.0"){
+                                        var cal = Math.round((k3+k4)*4.0*w)/200;
+                                        var store3 = localStorage.setItem("mode","Walking");
+                                        var store4 = localStorage.setItem("calorie_step",cal);
+                                    }else if(select_option1=="1.5"){
+                                        var cal = Math.round((k3+k4)*6.0*w)/200;
+                                        var store3 = localStorage.setItem("mode","Jogging");
+                                        var store4 = localStorage.setItem("calorie_step",cal);
+                                    }else if(select_option1=="1.0"){
+                                        var cal = Math.round((k3+k4)*8.0*w)/200;
+                                        var store3 = localStorage.setItem("mode","Running");
+                                        var store4 = localStorage.setItem("calorie_step",cal);
+                                    }else{
+                                        var cal = (Math.round(k3+k4)*2.0*w)/200;
+                                        var store3 = localStorage.setItem("mode","None");
+                                        var store4 = localStorage.setItem("calorie_step",cal);
+                                    }
+                                    
+                                    } 
+                                   
+                                    function reset(){
+                                    document.getElementById("myForm").reset();
+                                    }
+                                    </script>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        {% endif %}
+    </div>
+    </div>
+</div>
+{% endblock %}
+

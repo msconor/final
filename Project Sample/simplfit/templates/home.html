@@ -1,0 +1,690 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>SimplFit - Index</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <link href="{%static 'assets/img/logo.png' %}" rel="icon">
+  <link href="{%static 'assets/img/logo.png' %}" rel="apple-touch-icon">
+
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+ 
+  <link href="{%static 'assets/vendor/aos/aos.css'%}" rel="stylesheet">
+  <link href="{%static 'assets/vendor/bootstrap/css/bootstrap.min.css'%}" rel="stylesheet">
+  <link href="{%static 'assets/vendor/bootstrap-icons/bootstrap-icons.css'%}" rel="stylesheet">
+  <link href="{%static 'assets/vendor/boxicons/css/boxicons.min.css'%}" rel="stylesheet">
+  <link href="{%static 'assets/vendor/glightbox/css/glightbox.min.css'%}" rel="stylesheet">
+  <link href="{%static 'assets/vendor/swiper/swiper-bundle.min.css'%}" rel="stylesheet">
+
+  
+  <link href="{% static 'assets/css/style.css'%}" rel="stylesheet">
+
+</head>
+
+<body>
+
+  
+  <section id="topbar" class="d-flex align-items-center">
+    <div class="container d-flex justify-content-center justify-content-md-between">
+      <div class="contact-info d-flex align-items-center">
+        <i class="bi bi-envelope-fill"></i><a href="mailto:info.simplfit@gmail.com">info@simplfit.com</a>
+        <i class="bi bi-phone-fill phone-icon"></i> 0416-222456
+      </div>
+      <div class="social-links d-none d-md-block" >
+        <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
+        <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
+        <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
+        <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+        <a href="#" class="location"><i class="bi-geo-alt-fill loc-info"> </i><span id="city"></span></a>
+        <script>
+          async function fetchText(){
+          let url ='https://ipinfo.io/json?token=';/*94703aed4ea5bf*/
+          let response = await fetch(url);
+          let data = await response.json();
+          document.getElementById("city").innerHTML=data.city;
+          console.log(data);
+      }
+      fetchText();
+      </script>
+      </div>
+    </div>
+   
+  </section>
+
+  <header id="header" class="d-flex align-items-center">
+    <div class="container d-flex align-items-center justify-content-between">
+
+      <h1 class="logo"><a href="home.html">SimplFit</a></h1>
+      
+
+      <nav id="navbar" class="navbar">
+      
+        <ul>    
+          <li><a class="nav-link scrollto active" href="{% url 'home'% }#hero">Home</a></li>
+          <li><a class="nav-link scrollto" href="{% url 'home'% }#about">About</a></li>
+          <li class="dropdown"><a class="nav-link scrollto" href=""><span>Services</span> <i class="bi bi-chevron-down"></i></a>
+            <ul>
+              <li class="dropdown"><a href="#"><span>Trackers</span> <i class="bi bi-chevron-right"></i></a>
+                <ul>
+                  {% if user.is_authenticated %}
+                  <li><a href="{% url 'water_log' %}">Water Tracker</a></li>
+                  <li><a href="{% url 'step_log' %}">Steps Tracker</a></li> 
+                  <li><a href="{% url 'sleep_log' %}">Sleep Tracker</a></li> 
+                  <li><a href="{% url 'medicine_log' %}">Medicine Tracker</a></li>
+                   {% endif %}
+                  <li><a href="{% url 'menstrual_cycle' %}">Menstrual Cycle Tracker</a></li>
+                </ul>
+              </li>
+              
+              
+              <li class="dropdown"><a href="#"><span>Food Tracker</span><i class="bi bi-chevron-right"></i></a>
+                <ul>
+                  {% if user.is_authenticated %}
+                  <li><a href="{% url 'food_log' %}">Food Log</a></li>{% endif %}
+                  <li><a href="{% url 'index' %}">Food List</a></li>
+                  {% if user.is_authenticated %}
+                  <li><a href="{% url 'food_add' %}">Add Food Items</a></li>
+                  <li class="dropdown"><a href="#"><span>Nutritional Trackers</span> <i class="bi bi-chevron-down"></i></a>
+                    <ul>
+                      <li><a href="{% url 'nutri' %}">Text Search</a></li>
+                      <li><a href="{% url 'nutri_img' %}">Image Search</a></li>
+                    </ul>
+                  </li>{% endif %}
+                  </li>
+                </ul>
+              </li>
+              
+              <li class="dropdown"><a href="#"><span>Workout Tracker</span><i class="bi bi-chevron-right"></i></a>
+                <ul>
+                  {% if user.is_authenticated %}
+                  <li><a href="{% url 'workout_log' %}">Workout Log</a></li>{% endif %}
+                  <li><a href="{% url 'index_workout' %}">Workout List</a></li>
+                  {% if user.is_authenticated %}
+                  <li><a href="{% url 'workout_add' %}">Add Workout</a></li>
+                  </li>{% endif %}
+                </ul>
+              </li>
+              {% if user.is_authenticated %}
+              <li class="dropdown"><a href="#"><span>More Features</span><i class="bi bi-chevron-right"></i></a>
+                <ul>
+                  <li><a href="{% url 'weather' %}">Weather + AQI</a></li>
+                  <li><a href="{% url 'foodrecipes' %}">Food Recipes</a></li>
+                  <li><a href="{% url 'exercise' %}">Exercise</a></li>
+                  </li>
+                </ul>
+              </li>{% endif %}
+            </ul>
+          </li>
+          <li><a class="nav-link scrollto" href="{% url 'home'% }#recent-blog-posts">Blogs</a></li>
+          <li><a class="nav-link scrollto" href="{% url 'home'% }#contact">Contact</a></li>
+          {% if user.is_authenticated %}
+          <li class='dropdown' ><a href="#"><i class="bi-person" style="font-size: 20px;"></i><i class="bi bi-chevron-down"></i></a>
+              <ul class='dropdown-1'>
+                <li> <a href="{% url 'weight_log' %}">User Profile<i class="bi-person-fill" style="font-size: 14px;"></i></a></li>
+                <li><a href="{% url 'logout' %}" id="btn" onclick="test()">Logout<i class="bi-box-arrow-left" style="font-size: 14px;"></i></a></li>
+                          
+              <script>
+                  function test(){
+                    localStorage.clear();
+                  }
+                     
+              </script> </ul>
+          </li>
+          
+          {% else %}
+          <li class='dropdown' ><a href="#"><i class="bi-globe2" style="font-size: 20px;"></i><i class="bi bi-chevron-down"></i></a>
+            <ul class='dropdown-1'>
+              <li> <a href="#">English <img src="https://cdn-icons-png.flaticon.com/512/555/555526.png" height="15px"></a></li>
+              <li><a href="{% url 'french_home' %}">French <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSK_OWlWhP8An4Qs1SSytmX2-ZPR5-mG4m3DqCedlZc&s" height="12px"></a></li>
+            </ul>
+        </li>
+          <li><a class="nav-link scrollto" href="{% url 'login' %}">Login <i class="bi-box-arrow-right" style="font-size: 14px;"></i></a></li> 
+          {% endif %}
+        </ul>
+        <i class="bi bi-list mobile-nav-toggle"></i>
+      </nav>
+     
+    </div>
+  </header>
+
+  <center><section id="hero" class="d-flex align-items-center">
+    <div class="container position-relative" data-aos="fade-up" data-aos-delay="500">
+      <h1>Welcome to SimplFit</h1>
+      <h2>If You Believe, You Will Achieve</h2>
+      {% if user.is_authenticated %}
+      <a href="https://www.youtube.com/watch?v=VEQaH4LruUo" class="glightbox_video glightbox play-btn mb-4"> <br><br><br><br><br><br><br><br><br>
+        <svg width="100" height="100" viewBox="0 0 131 131" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="inner-circle" d="M65 21C40.1488 21 20 41.1488 20 66C20 90.8512 40.1488 111 65 111C89.8512 111 110 90.8512 110 66C110 41.1488 89.8512 21 65 21Z" fill="white"></path>
+            <circle class="outer_circle" cx="65.5" cy="65.5" r="64" stroke="#f7c546"></circle>
+            <path class="play" fill-rule="evenodd" clip-rule="evenodd" d="M60 76V57L77 66.7774L60 76Z" fill="#f7c546"></path>
+        </svg>
+        </a>
+      <div>     
+    </div>
+      {% else %}
+      <a href="login.html" class="btn-get-started scrollto">Get Started</a>
+      {% endif %}
+    </div>
+  </section></center>
+
+  <main id="main">
+
+    
+    <section id="about" class="about">
+      <div class="container">
+
+        <div class="row">
+          <div class="col-lg-6 order-1 order-lg-1" data-aos="fade-left">
+            <img src="https://media.istockphoto.com/id/166674276/photo/yoga.jpg?s=612x612&w=0&k=20&c=Lm90K7Hn8Vn-L2_PzDqwspDx9bdb8XWGGug2gIuhbcE=" class="img-fluid" alt="">
+          </div>
+
+        <div class="col-lg-6 pt-4 pt-lg-0 order-2 order-lg-1 content" data-aos="fade-right">    
+            <p align="justify">
+            You’re on a journey to health and wellness. And we’re right there with you. How you feel affects every single day of your life, which is why you work so hard to get well and stay well. No matter your journey, we’re here to support, guide, and inspire you. We cut through the confusion with straight forward, person-first experiences, expert-reviewed - all designed to help you make the best decisions for yourself and the people you love. We want to help you own your well-being.
+            <br>Thanks for being here,<br>
+            <b>SimplFit Team</b> 
+            </p>
+        
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <section id="why-us" class="why-us">
+      <div class="container">
+
+        <div class="row">
+
+          <div class="col-lg-4" data-aos="fade-up">
+            <div class="box">
+              <span>01</span>
+              <h4>Easy Access</h4>
+              <p>Easily accessable through Mobile/PC/Tablet/Mac.</p>
+            </div>
+          </div>
+
+          <div class="col-lg-4 mt-4 mt-lg-0" data-aos="fade-up" data-aos-delay="150">
+            <div class="box">
+              <span>02</span>
+              <h4>Safe and Secure Data</h4>
+              <p>Data will not be shared with third-parties</p>
+            </div>
+          </div>
+
+          <div class="col-lg-4 mt-4 mt-lg-0" data-aos="fade-up" data-aos-delay="300">
+            <div class="box">
+              <span>03</span>
+              <h4>User-Friendly</h4>
+              <p>Visual representations are provided for graspable</p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <section id="services" class="services">
+      <div class="container">
+
+        <div class="section-title">
+          <span>Services</span>
+          <h2>Services</h2>
+          <p>Assortment of services at one place</p>
+        </div>
+
+        <div class="row">
+          <div class="col-lg-4 col-md-6 d-flex align-items-stretch" data-aos="fade-up">
+            <div class="icon-box">
+              <div class="icon"><i class="bx bxs-hot"></i></div>
+              <h4><a href="nutri.html">Calories</a></h4>
+              <p>To look and feel best, calculation of the calories will be performed for you</p>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4 mt-md-0" data-aos="fade-up" data-aos-delay="150">
+            <div class="icon-box">
+              <div class="icon"><i class='bx bx-heart-circle'></i></div>
+              <h4><a href="{% url 'sleep_log'%}">Health</a></h4>
+              <p>A fit body, a calm mind, a house full of love all these will be earn with us atmost</p>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4 mt-lg-0" data-aos="fade-up" data-aos-delay="300">
+            <div class="icon-box">
+              <div class="icon"><i class='bx bx-run'></i></i></div>
+              <h4><a href="{% url 'step_log'%}">Energize</a></h4>
+              <p>Walking is the favorite sport of the good and wise - Track the steps and float on the flow</p>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4" data-aos="fade-up" data-aos-delay="450">
+            <a href="{%url 'food_list'%}"><div class="icon-box">
+              <div class="icon"><i class='bx bx-bowl-hot'></i></i></div>
+              <h4><a href="{%url 'food_list'%}">Food</a></h4>
+              <p>By choosing healthy over skinny you are choosing self-love over self-judgement - we're here to guide you</p>
+            </div></a>
+          </div>
+
+          <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4" data-aos="fade-up" data-aos-delay="600">
+            <div class="icon-box">
+              <div class="icon"><i class='bx bx-dumbbell'></i></i></div>
+              <h4><a href="{%url 'workout_list'%}">Fitness</a></h4>
+              <p>If you want something you’ve never had, you must be willing to do something you’ve never done - Train with an real coach experiences</p>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4" data-aos="fade-up" data-aos-delay="750">
+            <a href="weather.html"><div class="icon-box">
+              <div class="icon"><i class='bx bxs-tree'></i></i></div>
+              <h4><a href="weather.html">Environment</a></h4>
+              <p>"Weather" - instant updates of essential factors in one place to your convenience</p>
+            </div></a>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <section id="faq" class="faq">
+      <div class="container-fluid" data-aos="fade-up">
+        <div class="section-title">
+          <span>FAQ</span>
+          <h2>FAQ</h2>
+          <p>Frequently Asked Questions</p>
+          </div>
+        <div class="row gy-4">
+
+          <div class="col-lg-7 d-flex flex-column justify-content-center align-items-stretch  order-2 order-lg-1">
+
+            <div class="content px-xl-5">
+            </div>
+
+            <div class="accordion accordion-flush px-xl-5" id="faqlist">
+
+              <div class="accordion-item" data-aos="fade-up" data-aos-delay="200">
+                <h3 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-content-1">
+                    <i class="bi bi-question-circle question-icon"></i>
+                    How to login into website?
+                  </button>
+                </h3>
+                <div id="faq-content-1" class="accordion-collapse collapse" data-bs-parent="#faqlist">
+                  <div class="accordion-body">
+                    To kick-start with us just click <a href="login.html"><u>Login</u></a>.
+                  </div>
+                </div>
+              </div>
+
+              <div class="accordion-item" data-aos="fade-up" data-aos-delay="300">
+                <h3 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-content-2">
+                    <i class="bi bi-question-circle question-icon"></i>
+                    Can I able to track my daily food intake?
+                  </button>
+                </h3>
+                <div id="faq-content-2" class="accordion-collapse collapse" data-bs-parent="#faqlist">
+                  <div class="accordion-body">
+                    Yes, You can able to track your daily food intake once login with us.
+                  </div>
+                </div>
+              </div>
+
+              <div class="accordion-item" data-aos="fade-up" data-aos-delay="400">
+                <h3 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-content-3">
+                    <i class="bi bi-question-circle question-icon"></i>
+                    Is there any charges for login to website?
+                  </button>
+                </h3>
+                <div id="faq-content-3" class="accordion-collapse collapse" data-bs-parent="#faqlist">
+                  <div class="accordion-body">
+                   We don't charge any prices for login, our website is free to all users. 
+                  </div>
+                </div>
+              </div>
+
+              <div class="accordion-item" data-aos="fade-up" data-aos-delay="500">
+                <h3 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-content-4">
+                    <i class="bi bi-question-circle question-icon"></i>
+                    Where can I subscribe to your newsletter?
+                  </button>
+                </h3>
+                <div id="faq-content-4" class="accordion-collapse collapse" data-bs-parent="#faqlist">
+                  <div class="accordion-body">
+                    At the end of home page you can able to find "Stay-in-Touch" where you should enter your email for our newsletter subscribition.
+                  </div>
+                </div>
+              </div>
+
+              <div class="accordion-item" data-aos="fade-up" data-aos-delay="600">
+                <h3 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-content-5">
+                    <i class="bi bi-question-circle question-icon"></i>
+                    Can I able check today's weather? 
+                  </button>
+                </h3>
+                <div id="faq-content-5" class="accordion-collapse collapse" data-bs-parent="#faqlist">
+                  <div class="accordion-body">
+                    Yes, You can check weather of any country.
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+          <div class="col-lg-5 align-items-stretch order-1 order-lg-2 img" style='background-image: url("https://icon-library.com/images/faq-icon/faq-icon-29.jpg");background-size: contain;'>&nbsp;</div>
+        </div>
+
+      </div>
+    </section>
+
+    
+     <section id="recent-blog-posts" class="recent-blog-posts">
+
+      <div class="container" data-aos="fade-up">
+
+        <div class="section-title">
+          <span>Blogs</span>
+          <h2>Blogs</h2>
+          <p>Lets read some engrossing experiences</p>
+          </div>
+
+        <div class="row">
+
+          <div class="col-lg-4" data-aos="fade-up" data-aos-delay="200">
+            <div class="post-box">
+              <div class="post-img"><img src="https://d18mqtxkrsjgmh.cloudfront.net/public/styles/header_image/public/2022-03/Strength%20Training%20Linked%20to%20Less%20Premature%20Mortality%2C%20CVD%2C%20and%20Diabetes.jpg?itok=yfbJCjiT" class="img-fluid" alt=""></div>
+              <div class="meta">
+                <span class="post-date">January 19, 2023</span>
+                <span class="post-author"> / Elizabeth Andrews</span>
+              </div>
+              <h3 class="post-title">5 Compound Exercises You Should Add to Your Workout</h3>
+              <p>Some of the simplest exercises are often the most valuable. Compound exercises, for example, address many actions at once, making them both efficient and effective. Here are five of the...</p>
+              <a href="blog-details-1.html" class="readmore stretched-link"><span>Read More</span><i class="bi bi-arrow-right"></i></a>
+            </div>
+          </div>
+
+          <div class="col-lg-4" data-aos="fade-up" data-aos-delay="400">
+            <div class="post-box">
+              <div class="post-img"><img src="https://artofhealthyliving.com/wp-content/uploads/2023/02/benefits-of-plant-based-diet.jpg" class="img-fluid" alt=""></div>
+              <div class="meta">
+                <span class="post-date">February 20, 2023</span>
+                <span class="post-author"> / Diana Smith</span>
+              </div>
+              <h3 class="post-title">PLANT-BASED DIET: Benefits And Ideas</h3>
+              <p>Plant-based diets have grown in popularity in recent years, with more people adopting vegetarian and vegan lifestyles. While ethical and environmental benefits are well-known,...</p>
+              <a href="blog-details-2.html" class="readmore stretched-link"><span>Read More</span><i class="bi bi-arrow-right"></i></a>
+            </div>
+          </div>
+
+          <div class="col-lg-4" data-aos="fade-up" data-aos-delay="600">
+            <div class="post-box">
+              <div class="post-img"><img src="https://artofhealthyliving.com/wp-content/uploads/2023/02/White-Lightning-Kratom-Powder-Why-Is-It-Becoming-Peoples-First-Choice-330x220.jpg" class="img-fluid" alt=""></div>
+              <div class="meta">
+                <span class="post-date">February 23,2023</span>
+                <span class="post-author"> / Anna Gottlieb</span>
+              </div>
+              <h3 class="post-title">White Lightning Kratom Powder  Why Is It People’s First Choice?</h3>
+              <p>White Lightning Kratom Powder is one of the most popular forms of Kratom available today, gathered from certified organic farmers and sustainably sourced. This...</p>
+              <a href="blog-details-3.html" class="readmore stretched-link"><span>Read More</span><i class="bi bi-arrow-right"></i></a>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <section id="contact" class="contact">
+      <div class="container">
+
+        <div class="section-title">
+          <span>Contact</span>
+          <h2>Contact</h2>
+          <p>We're here to fulfill your needs, feel free to contact us </p>
+        </div>
+
+        <div class="row" data-aos="fade-up">
+          <div class="col-lg-6">
+            <div class="info-box mb-4">
+              <i class="bx bx-map"></i>
+              <h3>Our Address</h3>
+              <p>VIT, Tamilnadu 632001,India</p>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-6">
+            <div class="info-box  mb-4">
+              <i class="bx bx-envelope"></i>
+              <h3>Email Us</h3>
+              <p>contact@info.com</p>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-6">
+            <div class="info-box  mb-4">
+              <i class="bx bx-phone-call"></i>
+              <h3>Call Us</h3>
+              <p>0416-222456</p>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="row" data-aos="fade-up">
+
+          <div class="col-lg-6 ">
+            <iframe class="mb-4 mb-lg-0" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3888.0410797840646!2d79.15155623488769!3d12.96922320000001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bad479f0ccbe067%3A0xfef222e5f36ecdeb!2sVellore%20Institute%20of%20Technology!5e0!3m2!1sen!2sin!4v1675868099217!5m2!1sen!2sin" frameborder="0" style="border:0; width: 100%; height: 384px;" allowfullscreen></iframe>
+          </div>
+          
+          <div class="col-lg-6">
+            
+            <form action="https://formspree.io/f/xwkjqjvz" method="POST" role="form" name="submit-to-email" class="php-email-form">
+              
+              <div class="row">
+                <div class="col-md-6 form-group">
+                  <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" required>
+                </div>
+                <div class="col-md-6 form-group mt-3 mt-md-0">
+                  <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" required>
+                </div>
+              </div>
+              <div class="form-group mt-3">
+                <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" required>
+              </div>
+              <div class="form-group mt-3">
+                <textarea class="form-control" name="message" rows="5" placeholder="Message" required></textarea>
+              </div>
+              <div class="my-3">
+                <div class="sent-message"><span id="mail"></span></div>
+              </div>
+              <div class="my-3">
+                <div class="loading"></div>
+                <div class="error-message"></div>
+                <div class="sent-message"></div>
+              </div>
+              <div class="text-center"><button type="submit">Send Message</button></div>
+            </form>
+            <script>
+              const scriptURL11 = 'https://script.google.com/macros/s/AKfycbyf_fKXq4mFeOAs3GCe-uXcck0AsKsCIlRbDwNcVqxPicqegUmkhR1-Xb8S5jBkJgY3/exec'
+              const form11 = document.forms['submit-to-email']
+              const msg11 = document.getElementById("mail")
+            
+              form11.addEventListener('submit', f => {
+                f.preventDefault()
+                fetch(scriptURL11, { method: 'POST', body: new FormData(form11)})
+                  .then(response =>{
+                    msg11.innerHTML= "Your message has been sent. Thank you!"
+                    setTimeout(function(){
+                      msg11.innerHTML= ""
+                    },5000)
+                    form11.reset()
+                  })
+                  .catch(error => console.error('Error!', error.message))
+              })
+            </script>
+          </div>
+          
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer id="footer">
+    <div class="footer-top">
+      <div class="container">
+        <div class="row">
+
+          <div class="col-lg-4 col-md-6">
+            <div class="footer-info">
+              <h3>SimplFit</h3>
+              <p>
+                VIT<br>
+                TN 632001, IN<br><br>
+                <strong>Phone:</strong> 0416-222456<br>
+                <strong>Email:</strong> info@simplfit.com<br>
+              </p>
+              <div class="social-links mt-3">
+                <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>
+                <a href="#" class="facebook"><i class="bx bxl-facebook"></i></a>
+                <a href="#" class="instagram"><i class="bx bxl-instagram"></i></a>
+                <a href="#" class=""><i class="bx bxl-youtube"></i></a>
+                <a href="#" class="linkedin"><i class="bx bxl-linkedin"></i></a>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-2 col-md-6 footer-links">
+            <h4>Useful Links</h4>
+            <ul>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Home</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#about">About us</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#services">Services</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Terms of service</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Privacy policy</a></li>
+            </ul>
+          </div>
+
+          <div class="col-lg-2 col-md-6 footer-links">
+            <h4>Our Services</h4>
+            <ul>
+              <li><i class="bx bx-chevron-right"></i> <a href="weather.html">Weather</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Exercise</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Sleep Cycle</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="user_profile.html">Weight_Log</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="nutri.html">Food Search</a></li>
+            </ul>
+          </div>
+
+          <div class="col-lg-4 col-md-6 footer-newsletter">
+            <h4>Stay in Touch</h4>
+            <p>Sign up for special offers, news and updates </p>
+            <form name="submit-to-google-sheet">
+              <input type="email" name="Email" placeholder="Enter your email"required>
+              <input type="submit" value="Subscribe">
+            </form>
+            <span id="msg"></span>
+
+            <script>
+              const scriptURL = 'https://script.google.com/macros/s/AKfycbyh4xAYuMabUPT_x4aNWhENaJCsihtNROJeY-xDgSfCBjD3uMeLYAizZtbRyAzYLKMDyw/exec'
+              const form = document.forms['submit-to-google-sheet']
+              const msg = document.getElementById("msg")
+            
+              form.addEventListener('submit', e => {
+                e.preventDefault()
+                fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+                  .then(response =>{
+                    msg.innerHTML= "Thank you for subscribing!"
+                    setTimeout(function(){
+                      msg.innerHTML= ""
+                    },5000)
+                    form.reset()
+                  })
+                  .catch(error => console.error('Error!', error.message))
+              })
+            </script>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="copyright">
+        &copy; Copyright <strong><span>SimplFit</span></strong>. All Rights Reserved
+      </div>
+      <div class="credits">
+        Designed by <a href="home.html">SimplFit</a>
+      </div>
+    </div>
+  </footer>
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+  <div id="preloader"></div>
+  
+  <script src="{%static 'assets/vendor/aos/aos.js' %}"></script>
+  <script src="{%static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{%static 'assets/vendor/glightbox/js/glightbox.min.js' %}"></script>
+  <script src="{%static 'assets/vendor/isotope-layout/isotope.pkgd.min.js' %}"></script>
+  <script src="{%static 'assets/vendor/swiper/swiper-bundle.min.js' %}"></script>
+  <script src="{%static 'assets/vendor/php-email-form/validate.js' %}"></script>
+
+  <script src="{%static 'assets/js/main.js' %}"></script>
+  <style>
+       
+        .glightbox_video {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          }
+        
+        .outer_circle {
+          stroke-width: 3;
+          stroke-dasharray: 410; 
+           stroke-dashoffset: 0;
+          stroke-linecap: square;
+          transition: all .4s ease-out;
+        }
+        
+        .glightbox_video:hover .outer_circle {
+        stroke-dashoffset:410;
+          transition: stroke .7s .4s ease-out, stroke-dashoffset .4s ease-out
+        }
+        
+        .glightbox_video:hover 
+        .inner-circle {
+          fill: #f7c546;
+          transition:fill .4s .3s ease-out;
+          
+        }
+        
+        .glightbox_video:hover
+        .play{
+            fill: white;
+          transition:fill .4s .3s ease-out;
+        }
+        </style>
+
+</body>
+
+</html>

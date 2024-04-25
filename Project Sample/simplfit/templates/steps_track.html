@@ -1,0 +1,380 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body %}  
+<title>SimplFit - Step Counter</title>
+  <style>
+        .aqi-input input{
+        border-radius: 25px;
+        background-color: #f7c546;
+        color: white;
+        text-align: left;
+    }
+    .aqi-input button{
+        color:#f7c546;
+        background-color: #191919;
+    }
+    .card-body{
+        background-color: rgba(25, 25, 25, 0.95);
+        }
+    .card-body p{
+        color: white;
+    }
+    .card-body strong{
+        color: #f7c546;
+    }
+    .card-body .form-group button{
+        background-color: #f7c546;
+        border: 2px #f7c546;
+    }
+    .card-body .form-group label{
+        color: white;
+    }
+    .card-body{
+            background-color: rgba(25, 25, 25, 0.95);
+        }
+
+    .card .card-header{
+            background-color:#191919;
+        }
+    .card{
+            color:rgba(255, 255, 255, 0.6);
+            border-color: #191919;
+        }
+    .table thead{
+        text-align: center;
+        color: #f7c546;
+    }
+    .table tbody{
+        
+        text-align: center;
+    }
+    .table{
+            color: white;
+        }
+    .table thead{
+            color: rgba(255, 255, 255, 0.6);
+        }
+    .table .to{
+            color: #f7c546;
+        }
+  </style>
+
+<section id="aqi" class="aqi">
+  <div class="container1">
+    <div class="section-title">
+        <span>Steps Counter</span>
+        <h2>Steps Counter</h2>
+        <p>Enter steps walked</p>
+        </div>
+        
+        <div class='card bg-secondary mb-3'>
+
+            <div class='card-body'>
+
+            <div class='form-group'>
+
+                    <form action="{% url 'step_log' %}" method='POST' onsubmit="return myFunction()">
+                        {% csrf_token %}
+                        <div class='form-group'>
+                            <div class='row'>
+                                <div class='col-5'>
+                                    <label for='walk_distance' class='form-label mt-2'>
+                                            Activity
+                                    </label>
+                                    <select class='form-control' id = 'cardio_doing' name='cardio_doing' required>
+                                        <option hidden="" disabled="disabled" selected="selected" value="">Select One</option>
+                                        <option value="Slow Walking">Slow Walk</option>
+                                        <option value="Walking">Brisk Walk</option>
+                                        <option value="Jogging">Jog</option>
+                                        <option value="Running">Run</option>
+                                    </select>
+                                </div>
+                                <div class='col-5'>
+                                    <label for='walk_distance' class='form-label mt-2'>
+                                        Distance Walked in Steps
+                                    </label>
+                                    <input
+                                        class='form-control'
+                                        type='number'
+                                        name='walk_distance' 
+                                        id='walk_distance'
+                                        placeholder="" step="0.01" pattern='^\d*(\.\d{0,1})?$'
+                                    required></div>
+                                    <div class='col-5'>
+                                        <label for='walk_distance' class='form-label mt-2'>
+                                            Distance Walked in Kms
+                                        </label>
+                                        <input
+                                            class='form-control'
+                                            type='number'
+                                            name='walk_distance_k' 
+                                            id='walk_distance_k'
+                                            placeholder="" step="0.001" pattern='^\d*(\.\d{0,2})?$'
+                                        required></div>
+                                 
+                               
+                                <div class='col-5'>
+                                    <label for='time_consumed' class='form-label mt-2'>
+                                       Time taken (in mins)
+                                    </label>
+                                    <input 
+                                        class='form-control'
+                                        type='number' 
+                                        name='time_consumed'
+                                        id='time_consumed'
+                                        placeholder='0'  title='Steps' 
+                                         required>
+                                </div>
+                                <div class='col-5'>
+                                    <label for='calories_burned' class='form-label mt-2'>
+                                       Calories Burned
+                                    </label>
+                                    <input 
+                                        class='form-control'
+                                        type='number' 
+                                        name='calories_burned'
+                                        id='calories_burned'
+                                        placeholder='0'  title='Steps'  step="0.01"
+                                        pattern='^\d*(\.\d{0,2})?$' required>
+                                </div>
+                                <div class='col-2'>
+                                    <button type='submit' class='btn btn-primary' style='margin-top:40px;'>
+                                        Add
+                                    </button> <button type="reset" class='btn btn-primary' id="myForm" style='margin-top:40px;' onclick="reset()">Reset</button></div>
+                                   
+                               
+                            </div>
+                        </div>
+                    </form>
+                    <center>
+                        <button onClick="refreshPage() " class='btn btn-primary' style='margin-top:40px;' ><a href="step_goal.html" target="popup" 
+                            onclick="window.open('step_goal.html','popup','width=600,height=620');" style="color: white;">Calculate Distance Walked </a></button> 
+                            <script>
+                                function refreshPage(){
+                                   alert("Important! Refresh page after setting new goal")
+                                    
+                                } 
+                                </script>
+                    <button class='btn btn' style="font-size: 16px; background-color: #f7c546; margin-top:40px;"><a href=""  onclick="window.location.reload"><i class="bi-arrow-clockwise" style="color: white;"></i></a></button>
+                </center>
+                </div>
+
+            </div>
+        </div>
+        <div class='py-4 mt-auto'>
+            <div class='container-fluid px-4'>
+        
+                <div class='row justify-content-center'>
+                    <div class='col-xl-12'>
+                        
+                            <div class='row'>
+                                <div class='col-md-6 mt-4'>
+        <div class='card bg-secondary mb-1'>
+                                
+            <div class='card-header'>
+                <h5>Steps calories burned today</h5>
+                <h5><strong style="color: #f7c546;">{% now 'D, jS F Y' %}</strong></h5>
+            </div>
+        <div class='card-body'>
+        <table id='steptable' class='table' >
+            <thead>
+                <tr>
+                    <th scope='col' class='col-md-2'>Activity</th>
+                    <th scope='col' class='col-md-2'>Calories Burned</th>
+                    <th scope='col' class='col-md-2'>Steps count</th>
+                    <th scope='col' class='col-md-2'>Kilometers</th>
+                    <th scope='col' class='col-md-2'>Time Consumed</th>
+                    <th scope='col' class='col-md-2'><a class='btn btn-danger' href="{% url 'step_log_delete_all' %}" onclick="return confirm('Are you sure you want to clear sleep log?');">
+                        <span style="color: white;">Clear Log</span>
+                     </a></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for steps_record in user_step_log %}
+                    <tr>
+                        <td class='col-md-4'>{{ steps_record.cardio_doing}}</td>
+                        <td class='col-md-4'>{{ steps_record.calories_burned}}</td>
+                        <td class='col-md-4' >{{ steps_record.walk_distance }} </td>
+                        <td class='col-md-4' >{{ steps_record.walk_distance_k }} </td>
+                        <td class='col-md-4' >{{ steps_record.time_consumed }}</td>
+                        <td class='col-md-4'>
+
+                            <a class='btn btn-danger' href="{% url 'step_log_delete' steps_record.id %}" onclick="return confirm('Are you sure you want to delete this item?');">
+                            <i class="bi-trash"></i></a>
+
+                        </td>
+                    </tr>
+                {% endfor %}</tbody></table>
+                <table class="table"><tbody>
+            <tr class="to">
+                <td id='total' class='col-md-2' style="color: #f7c546;"><b>Total</b></td>
+                <td id='totalCalories' class='col-md-2'style="color: #f7c546;"><b></b></td>
+                <td id='totalstep' class='col-md-2' style="color: #f7c546;"><b></b></td>
+                <td id='totalkms' class='col-md-3' style="color: #f7c546;"><b></b></td>
+                <td id='totaltime' class='col-md-1' style="color: #f7c546;"><b></b></td>
+                 <td id='total' class='col-md-4' style="color: #f7c546;"> </td>     
+            </tr></tbody>
+        </table></div></div>
+    </div><div class='col-md-6 mt-4'>
+
+
+        <div class='card bg-secondary mb-3'>
+          <div class='card-header'>
+              <h5 style="color: white;">Calories Burned Breakdown</h5>
+          </div>
+          <div class='card-body justify-content-center'>
+            <center>
+    
+                      <div class='card-body justify-content-center'>
+                        <h5><i class="bi-square-fill" style="font-size:16px; color: rgba(252, 89, 124, 0.79);"> </i> Calorie Burned &nbsp;<i class="bi-square-fill" style="font-size:16px; color: rgba(54, 163, 235, 0.823)"> </i> Time Consumed</h5><br>
+                          <div class='chart-bar'>
+                              <canvas id='myChart' width="1000" height="500"></canvas>
+                          </div>
+                      </div>
+                  </div></center>            
+    </div>
+    </div>
+</div>
+</div>
+</div></div></div>
+</section>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  
+<script>
+     var table  = document.getElementById('steptable');
+        var calories = 0,time = 0,step=0,kms=0;
+        var k = localStorage.getItem("Kms");
+        var t = localStorage.getItem("time");
+        var u = localStorage.getItem("Steps");
+        var s = localStorage.getItem("measure");
+        var cs = localStorage.getItem("calorie_step"); 
+        var m = localStorage.getItem("mode"); 
+        document.getElementById("walk_distance").value = u;
+        document.getElementById("calories_burned").value = cs;
+        document.getElementById("time_consumed").value = t;
+        document.getElementById("cardio_doing").value = m;
+        document.getElementById("walk_distance_k").value = k;
+
+       
+
+for(var i = 1; i <table.rows.length; i++) {
+    calories += parseFloat(table.rows[i].cells[1].innerHTML);
+    calories = Math.round(calories);
+
+    step += parseFloat(table.rows[i].cells[2].innerHTML);
+    step = Math.round(step);
+
+    kms += parseFloat(table.rows[i].cells[3].innerHTML);
+    kms = kms;
+
+    time += parseFloat(table.rows[i].cells[4].innerHTML);
+    time = Math.round(time);
+   
+}
+
+document.getElementById('totalCalories').innerHTML = '<b>' + calories + " kcals"+ '</b>';
+document.getElementById('totalstep').innerHTML = '<b>' + step + " steps"+  '</b>';
+document.getElementById('totaltime').innerHTML = '<b>' + time + " mins"+  '</b>';
+document.getElementById('totalkms').innerHTML = '<b>' + kms + " kms"+  '</b>';
+var cal = localStorage.setItem("steps_calorie",calories);
+
+var caloriePercentage = Math.round((calories / 500) *  100);
+
+$('.progress-bar').animate({
+    width: caloriePercentage + '%',
+
+}, 500);
+var interval = setInterval(function () {
+$('.progress-bar').html(caloriePercentage + '%');
+
+}, 500);
+function reset(){
+                document.getElementById("myForm").reset();
+                }
+
+
+var recorded_hours = [];
+var recorded_hours1 = [];
+var recorded_date = [];
+for(var i = 1; i < table.rows.length; i++) {
+    recorded_hours.push([
+        parseFloat(table.rows[i].cells[1].innerHTML)
+    ]);
+    recorded_date.push([
+        table.rows[i].cells[0].innerHTML
+    ]);
+    recorded_hours1.push([
+        parseFloat(table.rows[i].cells[4].innerHTML)
+    ]);  
+}
+
+var values = recorded_hours.flat();
+var values1 = recorded_hours1.flat();
+
+
+// Set new default font family and font color to mimic Bootstrap's default styling
+Chart.defaults.global.defaultFontFamily = 'system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"';
+Chart.defaults.global.defaultFontColor = '#fff';
+
+// Area Chart - Weight History
+var ctx = document.getElementById('myChart');
+var myChart = new Chart(ctx, {
+    type: 'bar',
+    data:{
+  labels: [...recorded_date],
+  datasets: [{
+    label: 'Calories Burned',
+    data: values,
+    fill: true,
+    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+    borderColor: 'rgb(255, 99, 132)',
+    pointBackgroundColor: 'rgb(255, 99, 132)',
+    pointBorderColor: '#fff',
+    pointHoverBackgroundColor: '#fff',
+    pointHoverBorderColor: 'rgb(255, 99, 132)'
+  }, {
+    label: 'Time Consumed',
+    data: values1,
+    fill: true,
+    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+    borderColor: 'rgb(54, 162, 235)',
+    pointBackgroundColor: 'rgb(54, 162, 235)',
+    pointBorderColor: '#fff',
+    pointHoverBackgroundColor: '#fff',
+    pointHoverBorderColor: 'rgb(54, 162, 235)'
+  }]
+},
+  options:{
+    responsive: true,
+    plugins: {
+      title: {
+        display: true,
+        text: 'Suggested Min and Max Settings'
+      }
+    },
+    scales: {
+        r: {
+          pointlabels:{
+            display:true
+          },
+            angleLines: {
+                display: false
+            },
+            suggestedMin: 50,
+            suggestedMax: 100
+        }
+        
+    },plugins: {
+        title: {
+        display: true
+      },},
+        legend:{
+          display:false
+        }
+}
+});
+</script>
+
+{% endblock %}

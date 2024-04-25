@@ -1,0 +1,541 @@
+{%extends 'base.html'%}
+{% load static%}
+{% block body%}
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
+<title>SimplFit - Menstrual Cycle Tracker</title>
+  <style>
+        .aqi-input input{
+        border-radius: 25px;
+        background-color: #f7c546;
+        color: white;
+        text-align: left;
+    }
+    .aqi-input button{
+        color:#f7c546;
+        background-color: #191919;
+    }
+     .aqi-input form input[type=submit]:hover {
+    background: #f7c546;
+    color: #aaaaaa;
+    }
+    .card-body{
+        background-color: rgba(25, 25, 25, 0.95);
+        }
+    .card-body p{
+        color: white;
+    }
+    .card-body strong{
+        color: #f7c546;
+    }
+    .card-body .form-group button{
+        background-color: #f7c546;
+        border: 2px #f7c546;
+    }
+    .card-body .form-group label{
+        color: white;
+    }
+    .table thead{
+        text-align: center;
+        color: #f7c546;
+    }
+    .table tbody{
+        
+        text-align: center;
+    }
+  </style>
+
+<section id="aqi" class="aqi">
+  <div class="container1">
+    <div class="section-title">
+        <span>Menstrual Cycle Tracker</span>
+        <h2>Menstrual Cycle Tracker</h2>
+        <p>Check your upcoming visitor's date</p>
+        </div>
+<div class='card bg-secondary mb-3'>
+
+    <div class='card-body'>
+
+    <div class='form-group'>
+                <div class='form-group'>
+                    <div class='row'>
+                        <div class='col-5'>
+                            <label for='period_date' class='form-label mt-2'>
+                            When did your last period start?:
+                            </label>
+                            <input
+                                class='form-control'
+                                type='date'
+                                name='date' 
+                                id='date'
+                            required>
+                        </div>
+                        <div class='col-5'>
+                            <label for='period_cycle' class='form-label mt-2'>
+                               How long is your cycle?:
+                            </label>
+                            <input 
+                                class='form-control'
+                                type='number' 
+                                name='number'
+                                id='number'
+                                placeholder=''
+                                value="28"
+                                min="21"
+                                max="35" required>
+                        </div>
+                        
+                        <div class='col-2'>
+                           <a href="#popup1"><button type='submit' class='btn btn-primary' style='margin-top:40px;' onclick="myFunction()">
+                                Track Now
+                            </button>
+                            </a>
+                            <button type='rest' class='btn btn-primary' style='margin-top:40px;' onclick="resetTimeout();">
+                              Reset
+                          </button> 
+                        </div><br>
+                    </div>
+                    <center>
+                      <body>
+                        <div class="container">
+                            <div id="calendar" > </div> 
+                        </div>
+                    </body></center>
+                    <center><h4><span id="sq" style="color: #f7c546; font-size: 24px;"></span><span id="res" style="color: white; font-size: 16px;"></span><strong><span id ="result" hidden></span></strong></h4></center>
+                    </div><center><h4 style="color: white; font-size: 24px;"><span id="fres" hidden></span><strong><span id ="fresult" hidden></span></strong></h4></center>
+<script type="text/javascript">
+  
+  function resetTimeout() {
+    
+    clearTimeout(timeout);
+    timeout = setTimeout("location.reload(true);");
+  }
+</script>
+                  </div>
+                </div>
+                </div>
+  </div>
+
+                      <div id="popup1" class="overlay">
+                        <div class="popup"><br>
+                          <h2>&nbsp;Would you like us to remain on your due date?</h2>
+                          <a class="close" href="#">&times;</a>
+                          <div class="content">
+                            
+                    <form name="submit-to-google-sheet">
+                        
+                      <input type="email" class='form-control' name="Email" placeholder="Enter your email to receive notification"required>
+                          <input type="text" class='form-control' name="Period Date" id="mail" hidden>
+                          &nbsp;<span id="msg" ></span>
+                          <center>
+                              <button type='submit' class='btn btn-primary' style='align-content: center; background-color: #f7c546; border-color: #f7c546;' value="Subscribe">
+                                  Notify Me
+                              </button><div><br></div><h5></h5></center> 
+                        </form>
+                        
+                          </div>
+                        </div>
+                      </div>
+                      
+            <style>
+
+.box {
+  width: 40%;
+  margin: 0 auto;
+  background: rgba(255,255,255,0.2);
+  padding: 35px;
+  border: 2px solid #fff;
+  border-radius: 20px/50px;
+  background-clip: padding-box;
+  text-align: center;
+}
+
+.button {
+  font-size: 1em;
+  background-color: #f7c546;
+  border: 2px solid #f7c546;
+  border-radius: 20px/50px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s ease-out;
+}
+.button:hover {
+  background: #191919;
+}
+
+.overlay {
+  position: fixed;
+  top: 250px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.7);
+  transition: opacity 500ms;
+  visibility: hidden;
+  opacity: 0;
+}
+
+.overlay:target {
+  visibility: visible;
+  opacity: 1;
+}
+
+.popup {
+  margin: 70px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 5px;
+  width: 30%;
+  position: relative;
+  transition: all 5s ease-in-out;
+}
+
+.popup h2 {
+  margin-top: 0;
+  color: #333;
+  font-size: medium;
+  font-family: Tahoma, Arial, sans-serif;
+}
+.popup .close {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  transition: all 200ms;
+  font-size: 30px;
+  font-weight: bold;
+  text-decoration: none;
+  color: #333;
+}
+.popup .close:hover {
+  color: #f7c546;
+}
+.popup .content {
+  max-height: 30%;
+  overflow: auto;
+}
+
+@media screen and (max-width: 700px){
+  .box{
+    width: 70%;
+  }
+  .popup{
+    width: 70%;
+  }
+}
+</style>
+
+
+            <script>
+              var date = new Date();
+
+var day = date.getDate();
+var month = date.getMonth() + 1;
+var year = date.getFullYear();
+
+if (month < 10) month = "0" + month;
+if (day < 10) day = "0" + day;
+
+var today = year + "-" + month + "-" + day;       
+document.getElementById("date").value = today;
+            </script>
+              
+            
+
+            <script>
+              const scriptURL = 'https://script.google.com/macros/s/AKfycbxy1NfhhhQRo5oS7O2JhIBWBfSvz6VkNpcR5hdp7Lvc3OuPM0FCZUOGnOffWxssmoipEQ/exec'
+              const form = document.forms['submit-to-google-sheet']
+              const msg = document.getElementById("msg")
+            
+              form.addEventListener('submit', e => {
+                e.preventDefault()
+                fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+                  .then(response =>{
+                    msg.innerHTML= "Thank you for subscribing!"
+                    setTimeout(function(){
+                      msg.innerHTML= ""
+                    },5000)
+                    form.reset()
+                  })
+                  .catch(error => console.error('Error!', error.message))
+              })
+            </script>
+
+    </div>
+     
+     <section id="faq" class="faq">
+        <div class="container-fluid" data-aos="fade-up">
+          <div class="section-title">
+            <span>FAQ</span>
+            <h2>FAQ</h2>
+            <p>Frequently Asked Questions</p>
+            </div>
+          <div class="row gy-4">
+  
+            <div class="col-lg-7 d-flex flex-column justify-content-center align-items-stretch  order-2 order-lg-1">
+  
+              <div class="content px-xl-5">
+              </div>
+  
+              <div class="accordion accordion-flush px-xl-5" id="faqlist">
+  
+                <div class="accordion-item" data-aos="fade-up" data-aos-delay="200">
+                  <h3 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-content-1">
+                      <i class="bi bi-question-circle question-icon"></i>
+                      What is a period calculator?
+                    </button>
+                  </h3>
+                  <div id="faq-content-1" class="accordion-collapse collapse" data-bs-parent="#faqlist">
+                    <div class="accordion-body">
+                        Always be prepared for your upcoming periods and know in advance when you’ll be ovulating thanks to the effortless Whisper period calculator.
+
+                        Never be surprised when it’s that time of the month as the period calculator ensures you know exactly when to expect your next period.
+                        
+                        Keeping monthly calculations of your period and other symptoms helps you recognize when you’re ovulating and anticipate your period so you can feel fresh and prepared every day of your menstrual cycle.
+                    </div>
+                  </div>
+                </div>
+  
+                <div class="accordion-item" data-aos="fade-up" data-aos-delay="300">
+                  <h3 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-content-2">
+                      <i class="bi bi-question-circle question-icon"></i>
+                      How to use our period calculator?
+                    </button>
+                  </h3>
+                  <div id="faq-content-2" class="accordion-collapse collapse" data-bs-parent="#faqlist">
+                    <div class="accordion-body">
+                        Simply answer the following 2 questions to get started:
+
+                        1. When did your last period start?
+                        2. How long is your menstrual cycle?
+                        Now, click on the "Track Now" button and you are all set!
+                        
+                        SimplFit period calculator will inform you when is your next period due 
+                    </div>
+                  </div>
+                </div>
+  
+                <div class="accordion-item" data-aos="fade-up" data-aos-delay="400">
+                  <h3 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-content-3">
+                      <i class="bi bi-question-circle question-icon"></i>
+                      How does the calculator calculate the menstrual cycle?
+                    </button>
+                  </h3>
+                  <div id="faq-content-3" class="accordion-collapse collapse" data-bs-parent="#faqlist">
+                    <div class="accordion-body">
+                        The period calculator predicts the time to expect your next period by analyzing your period history data. Every body and every cycle is unique so it's important to remember that this the best estimate of your menstrual cycle. Better to feel prepared than surprised, no?
+
+                        The average period lasts up to 28 days, but it’s completely normal to have a slightly longer or shorter cycle. No need to worry as it’s all very natural. Considering that, the period calculator is not 100% accurate for girls who have irregular periods, as its extremely complicated to predict the date of the next period in those cases. However, it can help give you an overview of just how irregular your period is and therefore have more of an idea of what to expect in future. 
+                    </div>
+                  </div>
+                </div>
+  
+                <div class="accordion-item" data-aos="fade-up" data-aos-delay="500">
+                  <h3 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-content-4">
+                      <i class="bi bi-question-circle question-icon"></i>
+                      Why use a period calculator to predict your cycle?
+                    </button>
+                  </h3>
+                  <div id="faq-content-4" class="accordion-collapse collapse" data-bs-parent="#faqlist">
+                    <div class="accordion-body">
+                        Knowing when to expect your next period gives you freedom in making plans!
+
+                        We all want to enjoy our vacations as much as possible and deserve the carefree feeling and not worry about having your period.
+                        
+                        The period calculator gives you the knowledge of when your next period is coming, so that you are not caught unawares!
+                    </div>
+                  </div>
+                </div>
+  
+                <div class="accordion-item" data-aos="fade-up" data-aos-delay="600">
+                  <h3 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-content-5">
+                      <i class="bi bi-question-circle question-icon"></i>
+                      How does a menstrual cycle usually look?
+                    </button>
+                  </h3>
+                  <div id="faq-content-5" class="accordion-collapse collapse" data-bs-parent="#faqlist">
+                    <div class="accordion-body">
+                        All menstrual cycles are unique, but they do have some things in common:
+
+                        <b>Pre-Period:</b>
+                        When you period is about to come, you start experiencing Premenstrual Syndrome, or 'PMS', symptoms, such as headaches, bloating, irritability and generally feeling more emotional than normal. We all know how it feels!
+                        
+                        <b>Period:</b>
+                        Day 1 is the start of your cycle and when the bleeding begins. Periods generally last between 4 and 7 days, with the heaviest days being the first and the second. An average cycle lasts 28 days but can range from as few as 21 days to as many as 35 days. Keep in mind that you need to consult with your doctor if your period lasts longer than 7 consecutive days.
+                        
+                        <b>Peak Ovulation:</b>
+                        This is the period when you will be ovulating and have the highest chances of getting pregnant. The fertile period length is about 6 days. In a 28-day cycle, ovulation typically occurs on day 14. The tracker will also help you to define these days!
+                    </div>
+                  </div>
+                </div>
+  
+              </div>
+  
+            </div>
+  
+            <div class="col-lg-5 align-items-stretch order-1 order-lg-2 img" style='background-image: url("https://vinmec-prod.s3.amazonaws.com/images/20190425_144229_268377_bi-dau-bung-kinh-ke.max-1800x1800.jpg");background-size: contain;'>&nbsp;</div>
+          </div>
+  
+        </div>
+      </section>
+      
+     <section id="recent-blog-posts" class="recent-blog-posts">
+
+      <div class="container" data-aos="fade-up">
+
+        <div class="section-title">
+          <span>Related Article</span>
+          <h2>Related Article</h2>
+          <p>Know more about your unwelcome visitor</p>
+          </div>
+
+        <div class="row">
+
+          <div class="col-lg-4" data-aos="fade-up" data-aos-delay="200">
+            <div class="post-box">
+              <div class="post-img"><img src="https://images.ctfassets.net/285b4h6rshof/2R2vqhPU5vNtY495uydkr0/a91ffa73eb603ef6f294c2d780bb5860/DT_Banner.png?w=1600" class="img-fluid" alt=""></div>
+              <div class="meta">
+                <span class="post-date"></span>
+                <span class="post-author"></span>
+              </div>
+              <h3 class="post-title">A Girl’s First Period: What to Expect?</h3>
+              <p>Here you are, about to get your first period soon! Puberty can seem very intriguing from the numerous whispered stories you may have heard around you. It’s good to start becoming aware of the changes your body undergoes...</p>
+              <a href="https://whisper.co.in/en-in/girls-and-parents/my-first-period/a-girls-first-period-what-to-expect" class="readmore stretched-link" target="popup" 
+                    onclick="window.open('https://whisper.co.in/en-in/girls-and-parents/my-first-period/a-girls-first-period-what-to-expect/','popup','width=600,height=600')"><span>Read More</span><i class="bi bi-arrow-right"></i></a>
+            </div>
+          </div>
+
+          <div class="col-lg-4" data-aos="fade-up" data-aos-delay="400">
+            <div class="post-box">
+              <div class="post-img"><img src="https://images.ctfassets.net/285b4h6rshof/7oSlOoajdWWceeadhP5NJQ/69c32e3667f4e1ba0d31750087ac0f3c/DT_Banner_Tips_for_a_Healthy_Period_2x.png?w=1600" class="img-fluid" alt=""></div>
+              <div class="meta">
+                <span class="post-date"></span>
+                <span class="post-author"></span>
+              </div>
+              <h3 class="post-title">Tips for A Healthy Period</h3>
+              <p>A Happy Period is not as difficult as most of you would consider it to be. As healthy as it is to get a normal menstrual cycle with regular periods, it is just equally important to ensure a healthy period.In order to avoid a painful or irregular period ...</p>
+              <a href="https://whisper.co.in/en-in/women-health/tips-for-better-period/tips-for-healthy-period" class="readmore stretched-link" target="popup" 
+              onclick="window.open('https://whisper.co.in/en-in/women-health/tips-for-better-period/tips-for-healthy-period/','popup','width=600,height=600')"><span>Read More</span><i class="bi bi-arrow-right"></i></a>
+            </div>
+          </div>
+
+          <div class="col-lg-4" data-aos="fade-up" data-aos-delay="600">
+            <div class="post-box">
+              <div class="post-img"><img src="https://images.ctfassets.net/285b4h6rshof/1O0teUpJQhzjvKpF87yddv/80fa6b887ef59af6d0f3f15c3d39cec9/DT_Banner.png?w=1600" class="img-fluid" alt=""></div>
+              <div class="meta">
+                <span class="post-date"></span>
+                <span class="post-author"></span>
+              </div>
+              <h3 class="post-title">Reasons for a Late Period</h3>
+              <p>You’ve opened your bag and noticed a pack of sanitary pads, and you suddenly realize you have a delayed period. But there is nothing to worry about. A late period is not as serious or as unusual as you may think of it. Reasons for late periods could be many, most related to your health or lifestyle.</p>
+              <a href="https://whisper.co.in/en-in/girls-and-parents/female-menstrual-cycle/reasons-for-a-late-period" class="readmore stretched-link" target="popup" 
+              onclick="window.open('https://whisper.co.in/en-in/girls-and-parents/female-menstrual-cycle/reasons-for-a-late-period/','popup','width=600,height=600')"><span>Read More</span><i class="bi bi-arrow-right"></i></a>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+</div>
+     
+    <script>
+      
+        function myFunction() {
+            const months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+            const days = ["Sunday","Monday","Tuesday","Wednesday","Thrusday","Friday","Saturday"];
+            const x = document.getElementById("number").value;    
+            const date_1 = new Date(document.getElementById("date").value);
+            const date1 = date_1.getDate() + parseInt(x);
+            date_1.setDate(date1);
+            const date_2 = new Date(document.getElementById("date").value);
+            const date2 = date_2.getDate() + parseInt(x)+1;
+            date_2.setDate(date2);
+            const date_3 = new Date(document.getElementById("date").value);
+            const date3 = date_3.getDate() + parseInt(x)+2;
+            date_3.setDate(date3);
+            const date_4 = new Date(document.getElementById("date").value);
+            const date4 = date_4.getDate() + parseInt(x)+3;
+            date_4.setDate(date4);
+            const date_5 = new Date(document.getElementById("date").value);
+            const date5 = date_5.getDate() + parseInt(x)+4;
+            date_5.setDate(date5);
+            const date_6 = new Date(document.getElementById("date").value);
+            const date6 = date_6.getDate() + parseInt(x)+5;
+            date_6.setDate(date6);
+            console.log(date_6)
+            let month = months[date_1.getMonth()];
+            let month1 = months[date_2.getMonth()];
+            let month2 = months[date_3.getMonth()];
+            let day = days[date_1.getDay()];
+            
+            document.getElementById("sq").innerHTML = "&#9632;";
+            document.getElementById("res").innerHTML = " Period Days";
+            document.getElementById("result").innerHTML = month +" "+date_1.getDate(date_1)+", "+ month1 + " "+date_2.getDate(date_2)+", "+ month2 + " "+date_3.getDate(date_3);
+            let f = date_1;
+            const f_date = new Date(f);
+            const fdate = f_date.getDate() - 14;
+            f_date.setDate(fdate);
+            let fmonth = months[f_date.getMonth()];
+            let f1 = date_1;
+            const f_date1 = new Date(f);
+            const fdate1 = f_date1.getDate() - 13;
+            f_date1.setDate(fdate1);
+            let fmonth1 = months[f_date1.getMonth()];
+            document.getElementById("fres").innerHTML = "Fertile time will be "
+            document.getElementById("fresult").innerHTML = fmonth +" "+f_date.getDate(f_date)+", "+ fmonth1 +" "+f_date1.getDate(f_date1);
+            document.getElementById('mail').setAttribute("value", (date_1.getMonth(date_1)+1)+"/"+date_1.getDate(date_1)+"/"+date_1.getFullYear(date_1));
+        
+        jQuery(document).ready(function() {
+        
+        var x1 = (date_1.getMonth(date_1)+1)+"/"+date_1.getDate(date_1)+"/"+date_1.getFullYear(date_1); 
+        var x2 = (date_2.getMonth(date_2)+1)+"/"+date_2.getDate(date_2)+"/"+date_2.getFullYear(date_2); 
+        var x3 = (date_3.getMonth(date_3)+1)+"/"+date_3.getDate(date_3)+"/"+date_3.getFullYear(date_3);
+        var x4 = (date_4.getMonth(date_4)+1)+"/"+date_4.getDate(date_4)+"/"+date_4.getFullYear(date_4); 
+        var x5 = (date_5.getMonth(date_5)+1)+"/"+date_5.getDate(date_5)+"/"+date_5.getFullYear(date_5);  
+        var x6 = (date_6.getMonth(date_6)+1)+"/"+date_6.getDate(date_6)+"/"+date_6.getFullYear(date_6); 
+        var eventDates = {};
+        eventDates[ new Date(x1)] = new Date(x1).toString();;
+        eventDates[ new Date(x2)] = new Date(x2).toString();;
+        eventDates[ new Date(x3)] = new Date(x3).toString();;
+        eventDates[ new Date(x4)] = new Date(x4).toString();; 
+        eventDates[ new Date(x5)] = new Date(x5).toString();; 
+        eventDates[ new Date(x6)] = new Date(x6).toString();;  
+        
+        // datepicker
+        jQuery('#calendar').datepicker({
+            beforeShowDay: function( date ) {
+                var highlight = eventDates[date];
+                if( highlight ) {
+                     return [true, "event", highlight]; 
+                } else {
+                     return [true, '', ''];
+                }
+             }
+        });
+
+    });var timeout = setTimeout("location.reload(true);",60000);
+
+    
+  }
+        </script>
+
+<style>
+#calendar {
+    margin-top: 40px;
+}
+    
+.event a {
+    background-color: #f7c546 !important;
+    background-image :none !important;
+    color: #ffffff !important;
+}
+
+</style>
+{% endblock%}

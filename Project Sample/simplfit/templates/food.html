@@ -1,0 +1,307 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>SimplFit - Food</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  
+  <link href="{%static 'assets\img\logo.png' %}" rel="icon">
+  <link href="{%static 'assets\img\logo.png' %}" rel="apple-touch-icon">
+
+
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  
+  
+  <link href="{%static 'assets/vendor/aos/aos.css'%}" rel="stylesheet">
+  <link href="{%static 'assets/vendor/bootstrap/css/bootstrap.min.css'%}" rel="stylesheet">
+  <link href="{%static 'assets/vendor/bootstrap-icons/bootstrap-icons.css'%}" rel="stylesheet">
+  <link href="{%static 'assets/vendor/boxicons/css/boxicons.min.css'%}" rel="stylesheet">
+  <link href="{%static 'assets/vendor/glightbox/css/glightbox.min.css'%}" rel="stylesheet">
+  <link href="{%static 'assets/vendor/swiper/swiper-bundle.min.css'%}" rel="stylesheet">
+
+  
+  <link href="{% static 'assets/css/style.css'%}" rel="stylesheet">
+
+  
+</head>
+ 
+ <section id="topbar" class="d-flex align-items-center">
+    <div class="container d-flex justify-content-center justify-content-md-between">
+      <div class="contact-info d-flex align-items-center">
+        <i class="bi bi-envelope-fill"></i><a href="mailto:info@simplfit.com">info@simplfit.com</a>
+        <i class="bi bi-phone-fill phone-icon"></i> 0416-222456
+      </div>
+      <div class="social-links d-none d-md-block" >
+        <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
+        <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
+        <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
+        <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+        <a href="#" class="location"><i class="bi-geo-alt-fill loc-info"> </i><span id="city"></span></a>
+        <script>
+          async function fetchText(){
+    let url ='https://ipinfo.io/json?token=94703aed4ea5bf';/*94703aed4ea5bf*/
+    let response = await fetch(url);
+    let data = await response.json();
+    document.getElementById("city").innerHTML=data.city;
+    console.log(data);
+}
+fetchText();
+      </script>
+      </div>
+    </div>
+   
+  </section>
+
+ 
+  <header id="header" class="d-flex align-items-center">
+    <div class="container d-flex align-items-center justify-content-between">
+
+      <h1 class="logo"><a href="{%url 'home'%}">SimplFit</a></h1>
+      
+
+    </div>
+  </header>
+
+<body>
+
+ 
+  {% block body %}
+  <style>
+    .food a{
+        background-color: #f7c546;
+        border-color: #f7c546;
+        color: white;
+    }
+    .food a:hover{
+        background-color: #f7c546;
+        color: #191919;
+    }
+    .food img {
+    float: center;
+    width:  200px;
+    height: 200px;
+    object-fit: cover;
+    display: block;
+    margin-bottom:20px;
+    border-radius: 25px;
+    }
+    .food .card-header{
+        color:rgba(255, 255, 255, 0.6);
+        border-color: #191919;
+        background-color:#191919;
+    }
+    .food .card-body{
+        background-color:rgba(25, 25, 25, 0.95);
+    }
+    .dark-mode {
+    background-color: black;
+    color: white;
+    }
+
+  </style>
+  <div class = "food">
+<div class='py-4 mt-auto'>
+    <div class='container-fluid px-4'>
+        <a href="{% url 'index' %}" class='btn my-3'><i class="bi-arrow-left"></i></a>
+
+        
+
+        <div class='row justify-content-center'>
+            <div class='col-6'>
+    <center>
+                <h2>{{ food.food_name }}</h2>
+                <h5>Category: {{ food.category }}</h5><br>
+                {% for image in images %}
+                    <a href='#'>
+                        <img 
+                            src="{{ image.image.url|default:'../../static/images/no_image.png' }}" 
+                            class='img-fluid'
+                            alt='food image'
+                        >
+                    </a>
+                {% endfor %}</center>
+            </div>
+            <div class='col-6'>
+                <div class='card text-white bg-info mb-3'>
+                    <div class='card-header'>
+                        <div class='d-flex w-100 justify-content-between'>
+                            <h5 class='card-title mb-1'>
+                                Calories per {{ food.quantity|floatformat:0 }} grams:
+                            </h5>
+                            <p style="color: white;"><strong>{{ food.calories }}</strong></p>
+
+                            <input type='hidden' id='calories_details' name='calories_details' value='{{ food.calories }}'>
+                            <input type='hidden' id='fat_details' name='calories_details' value='{{ food.fat }}'>
+                            <input type='hidden' id='carbohydrates_details' name='calories_details' value='{{ food.carbohydrates }}'>
+                            <input type='hidden' id='protein_details' name='calories_details' value='{{ food.protein }}'>
+                            <input type='hidden' id='fiber_details' name='calories_details' value='{{ food.fiber }}'>
+                        
+                        </div>
+                    </div>
+                    <div class='card-body'>
+
+                        <div class='d-flex h-25 w-150 justify-content-center'>
+                            <h4 class='card-title' style="color: #f7c546;">
+                                Macronutrients (g) per {{ food.quantity|floatformat:0 }} grams
+                            </h4></center>
+                        </div>
+
+                        <div class='d-flex w-100 justify-content-between'>
+                            <p class='mb-1'>Fat</p>
+                            <p><strong>{{ food.fat }}</strong></p>
+                        </div>
+
+                        <div class='d-flex w-100 justify-content-between'>
+                            <p class='mb-1'>Carbohydrates</p>
+                            <p><strong>{{ food.carbohydrates }}</strong></p>
+                        </div>
+
+                        <div class='d-flex w-100 justify-content-between'>
+                            <p class='mb-1'>Protein</p>
+                            <p><strong>{{ food.protein }}</strong></p>
+                        </div>
+
+                        <div class='d-flex w-100 justify-content-between'>
+                            <p class='mb-1'>Fiber</p>
+                            <p><strong>{{ food.fiber }}</strong></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class='card bg-secondary mb-6'>
+                    <div class='card-header'>
+                        <h4>Macronutrients breakdown</h4>
+                    </div>
+                    <div class='card-body h-25 w-100 justify-content-center'>
+                        <div class='chart-bar'>
+                            <canvas id='myBarChart'></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+</div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+       
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+
+    <script>
+        var calories = 0, fat = 0, carbohydrates = 0, protein = 0, fiber= 0;
+
+var caloriesValue = document.getElementById('calories_details').value;
+calories = parseFloat(caloriesValue);
+
+var fatValue = document.getElementById('fat_details').value;
+fat = parseFloat(fatValue);
+
+var carbohydratesValue = document.getElementById('carbohydrates_details').value;
+carbohydrates = parseFloat(carbohydratesValue);
+
+var proteinValue = document.getElementById('protein_details').value;
+protein = parseFloat(proteinValue);
+
+var fiberValue = document.getElementById('fiber_details').value;
+fiber = parseFloat(fiberValue);
+
+
+// Set new default font family and font color to mimic Bootstrap's default styling
+Chart.defaults.global.defaultFontFamily = 'system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"';
+Chart.defaults.global.defaultFontColor = '#FFFFFF';
+  
+// Horizontal Bar Chart - Macronutrients breakdown
+var ctx = document.getElementById('myBarChart');
+var myBarChart = new Chart(ctx, {
+    type: 'horizontalBar',
+    data: {
+        labels: ['Fat', 'Carbs', 'Protein', 'Fiber'],
+        datasets:
+        [
+            {
+                data: [fat, carbohydrates, protein, fiber],
+                backgroundColor: ['#e5a641', '#e94b43', '#419ad6', '#55b560'],
+                barPercentage: 1,
+            }
+        ],
+    },
+    options: {
+        responsive: true,
+        legend: {
+            display: false,
+            position: 'bottom',
+            fullWidth: true,
+            labels: {
+                boxWidth: 10,
+                padding: 50
+            }
+        },
+        scales: {
+            yAxes: [{
+                gridLines: {
+                    display: true,
+                    drawTicks: true,
+                    drawOnChartArea: false
+                },
+                ticks: {
+                    fontColor: '#FFFFFF',
+                    fontSize: 12,
+                }
+            }],
+            xAxes: [{
+                gridLines: {
+                    display: true,
+                    drawTicks: false,
+                    tickMarkLength: 5,
+                    drawBorder: false
+                },
+                ticks: {
+                    padding: 5,
+                    beginAtZero: true,
+                    fontColor: '#FFFFFF',
+                    fontSize: 12,
+                    min: 0,
+                    max: 100,
+                    maxTicksLimit: 10,
+                    padding: 10,
+                    // Include a 'g' in the ticks
+                    callback: function(value, index, values) {
+                        return value + 'g';
+                    }
+                },
+                scaleLabel: {
+                    display: true,
+                    padding: 10,
+                    fontColor: '#f7c546',
+                    fontSize: 16,
+                    fontStyle: 700,
+                    labelString: 'Macronutrients (g) per 100 grams'
+                },
+            }],
+        },
+        tooltips: {
+            enabled: false,
+        },
+    }
+});
+    </script>
+    <script>
+        function myFunction() {
+           var element = document.body;
+           element.classList.toggle("dark-mode");
+        }
+        </script>
+        
+{% endblock %}
+</body>
+</html>

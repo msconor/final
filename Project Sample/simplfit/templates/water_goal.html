@@ -1,0 +1,247 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>SimplFit - Water Goal</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <link href="{%static 'assets\img\logo.png' %}" rel="icon">
+  <link href="{%static 'assets\img\logo.png' %}" rel="apple-touch-icon">
+
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  
+  <link href="{%static 'assets/vendor/aos/aos.css'%}" rel="stylesheet">
+  <link href="{%static 'assets/vendor/bootstrap/css/bootstrap.min.css'%}" rel="stylesheet">
+  <link href="{%static 'assets/vendor/bootstrap-icons/bootstrap-icons.css'%}" rel="stylesheet">
+  <link href="{%static 'assets/vendor/boxicons/css/boxicons.min.css'%}" rel="stylesheet">
+  <link href="{%static 'assets/vendor/glightbox/css/glightbox.min.css'%}" rel="stylesheet">
+  <link href="{%static 'assets/vendor/swiper/swiper-bundle.min.css'%}" rel="stylesheet">
+
+  <link href="{% static 'assets/css/style.css'%}" rel="stylesheet">
+
+</head>
+
+{% block body %}
+    <style>
+    .signup .card-body{
+            background-color: rgba(25, 25, 25, 0.95);
+        }
+
+    .signup .card .card-header{
+            background-color:#191919;
+        }
+
+    .signup .card{
+            color:rgba(255, 255, 255, 0.6);
+            border-color: #191919;
+        }
+    
+    .signup .form-group button{
+            background-color: #f7c546;
+            color: white;
+            border-color: #f7c546;
+        }
+    .signup .form-group  button[type="reset"]{
+            background-color: rgba(255, 255, 255, 0.6);
+            color: white;
+            border-color: rgba(255, 255, 255, 0.6);
+        }
+    .signup a{
+        background-color: #f7c546;
+        border-color: #f7c546;
+        color: white;
+    }
+    .signup a:hover{
+        background-color: #f7c546;
+        color: #191919;
+    }
+    </style>
+
+<div class="signup">
+<div class='py-4 mt-auto'>
+    <div class='container px-4'>
+        <div class="section-title">
+            <span>Set New Water Goal</span>
+            <h2>Set New Water Goal</h2>
+            <p>Enter the details</p></div>
+
+        {% if success %}
+            <br>
+            <div class='alert alert-dismissible alert-success' role='alert'>
+                <button type='button' class='btn-close' data-bs-dismiss='alert'></button>
+                The water goal set successfully.
+            </div>
+        {% else %} 
+                <div class='row'>
+                    <div class='col-lg-6 offset-lg-3'>
+                        <div class='card bg-secondary mb-3'>
+                            <div class='card-body'>
+    
+                                <div class='form-group'>
+                                    <form action="{% url 'water_goal' %}"  method='POST' enctype='multipart/form-data' onsubmit="myFunction();">
+                                        {% csrf_token %}
+                                        <div class='form-group'>
+                                           
+                                            <div class='col-5'>
+                                                <label for='gender' class='form-label mt-2'>
+                                                   Gender
+                                                </label>
+                                                <select name="gender" id="gender" class='form-control'  required>
+                                                    <option hidden="" disabled="disabled" selected="selected" value="">Select Gender</option>
+                                                    <option value="male">Male</option>
+                                                    <option value="female">Female</option>
+                                                 </select>
+                                            </div>
+                                            <div class='col-5'>
+                                                <label for='weight' class='form-label mt-2'>
+                                                   Weight
+                                                </label>
+                                                <input 
+                                                    class='form-control' type='number' name='weight' id='weight'
+                                                    placeholder='0' required>
+                                            </div>
+                                             
+                                             <div class='col-5'>
+                                                <label for='gender' class='form-label mt-2'>
+                                                    Activity level
+                                                </label>
+                                                <select name="workout" id="workout" class='form-control'  required>
+                                                    <option hidden="" disabled="disabled" selected="selected" value="">Select Any One</option>
+                                                    <option value="light">Light (1 - 3 days/week)</option>
+                                                    <option value="moderate">Moderate (3 - 5 days/week)</option>
+                                                    <option value="heavy">Heavy (6 - 7 days/week)</option>
+                                                    <option value="none">None</option>
+                                                 </select><br>
+                                            </div>
+                                            <div id="tutorial">
+                                                <p>Pregnancy status:
+                                                <input type="radio" id="not_preg" name="pregnancy" value="not_preg">
+                                                <label for="not_preg" style="color: white;">Not Pregnant</label>&nbsp;
+                                                <input type="radio" id="preg" name="pregnancy" value="preg">
+                                                <label for="preg" style="color: white;">Pregnant</label> &nbsp;
+                                                <input type="radio" id="lact" name="pregnancy" value="lact">
+                                                <label for="lact" style="color: white;">Lactating</label></p>
+                                             </div>
+                                        <script>
+                                            const el = document.getElementById('gender');
+                                            const box = document.getElementById('tutorial');
+                                            el.addEventListener('change', function handleChange(event) {
+                                               if (event.target.value === 'female') {
+                                                  box.style.visibility = 'visible';
+                                               } else {
+                                                  box.style.visibility = 'hidden';
+                                               }
+                                            });
+                                         </script>
+                                            <center><button type='submit' class='btn btn-primary'>Save</button>
+                                            <button type="reset" class='btn btn-primary' id="myForm" onclick="reset()">Reset</button></center>
+                                        </div>
+                                    </form>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        {% endif %}
+    </div>
+    </div>
+</div>
+{% endblock %}
+
+<script>
+   function myFunction() {
+  var weight = document.getElementById("weight").value;
+  var w = document.getElementById("workout")
+  var select_option = w.options[w.selectedIndex].value;
+  var g = document.getElementById("gender")
+  var select_option1 = g.options[g.selectedIndex].value;
+  {
+			var ele = document.getElementsByName('pregnancy');
+			  for(i = 0; i < ele.length; i++) {
+				  if(ele[i].checked)
+				 var x = ele[i].value;
+			  }
+  {if(select_option=="light" && select_option1=="male"){
+  var calcution = (weight*0.033)+0.3;
+  var store = localStorage.setItem("water_goal",calcution);
+    }else if(select_option=="light" && select_option1=="female"){
+            if(x=="not_preg"){
+                var calcution = (weight*0.033)- 0.6;
+                var store = localStorage.setItem("water_goal",calcution);
+            }else if(x=="preg"){
+                var calcution = (weight*0.033)- 0.6 + 0.6;
+                var store = localStorage.setItem("water_goal",calcution);
+            }else if(x=="lact"){
+                var calcution = (weight*0.033)- 0.6 + 1;
+                var store = localStorage.setItem("water_goal",calcution);
+            }else{
+                var calcution = (weight*0.033)- 0.6;
+                var store = localStorage.setItem("water_goal",calcution);
+            }
+    }else if(select_option=="moderate" && select_option1=="male"){
+  var calcution = (weight*0.033)+0.7;
+  var store = localStorage.setItem("water_goal",calcution);
+    }else if(select_option=="moderate" && select_option1=="female"){
+            if(x=="not_preg"){
+                var calcution = (weight*0.033)- 0.4;
+                var store = localStorage.setItem("water_goal",calcution);
+            }else if(x=="preg"){
+                var calcution = (weight*0.033)- 0.4 + 0.6;
+                var store = localStorage.setItem("water_goal",calcution);
+            }else if(x=="lact"){
+                var calcution = (weight*0.033)- 0.4 + 1;
+                var store = localStorage.setItem("water_goal",calcution);
+            }else{
+                var calcution = (weight*0.033)- 0.4;
+                var store = localStorage.setItem("water_goal",calcution);
+            }
+    }else if(select_option=="heavy" && select_option1=="male"){
+  var calcution = (weight*0.033)+0.9;
+  var store = localStorage.setItem("water_goal",calcution);
+    }else if(select_option=="heavy" && select_option1=="female"){
+        if(x=="not_preg"){
+                var calcution = (weight*0.033)- 0.2;
+                var store = localStorage.setItem("water_goal",calcution);
+            }else if(x=="preg"){
+                var calcution = (weight*0.033)- 0.2 + 0.6;
+                var store = localStorage.setItem("water_goal",calcution);
+            }else if(x=="lact"){
+                var calcution = (weight*0.033)- 0.2 + 1;
+                var store = localStorage.setItem("water_goal",calcution);
+            }else{
+                var calcution = (weight*0.033)- 0.2;
+                var store = localStorage.setItem("water_goal",calcution);
+            }
+    }else if(select_option=="none" && select_option1=="female"){
+        if(x=="not_preg"){
+                var calcution = (weight*0.033)- 0.8;
+                var store = localStorage.setItem("water_goal",calcution);
+            }else if(x=="preg"){
+                var calcution = (weight*0.033)- 0.8 + 0.6;
+                var store = localStorage.setItem("water_goal",calcution);
+            }else if(x=="lact"){
+                var calcution = (weight*0.033)- 0.8 + 1;
+                var store = localStorage.setItem("water_goal",calcution);
+            }else{
+                var calcution = (weight*0.033)- 0.8;
+                var store = localStorage.setItem("water_goal",calcution);
+            }
+    }else{
+  var calcution = (weight*0.033);
+  var store = localStorage.setItem("water_goal",calcution);
+    }
+}
+  }
+}
+   function reset(){
+  document.getElementById("myForm").reset();
+}
+  </script>

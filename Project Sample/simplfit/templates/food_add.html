@@ -1,0 +1,118 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>SimplFit - Food Add</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <link href="{%static 'assets\img\logo.png' %}" rel="icon">
+  <link href="{%static 'assets\img\logo.png' %}" rel="apple-touch-icon">
+
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  
+  <link href="{%static 'assets/vendor/aos/aos.css'%}" rel="stylesheet">
+  <link href="{%static 'assets/vendor/bootstrap/css/bootstrap.min.css'%}" rel="stylesheet">
+  <link href="{%static 'assets/vendor/bootstrap-icons/bootstrap-icons.css'%}" rel="stylesheet">
+  <link href="{%static 'assets/vendor/boxicons/css/boxicons.min.css'%}" rel="stylesheet">
+  <link href="{%static 'assets/vendor/glightbox/css/glightbox.min.css'%}" rel="stylesheet">
+  <link href="{%static 'assets/vendor/swiper/swiper-bundle.min.css'%}" rel="stylesheet">
+
+  <link href="{% static 'assets/css/style.css'%}" rel="stylesheet">
+
+</head>
+
+{% block body %}
+    <style>
+    .signup .card-body{
+            background-color: rgba(25, 25, 25, 0.95);
+        }
+
+    .signup .card .card-header{
+            background-color:#191919;
+        }
+
+    .signup .card{
+            color:rgba(255, 255, 255, 0.6);
+            border-color: #191919;
+        }
+    
+    .signup .form-group button{
+            background-color: #f7c546;
+            color: white;
+            border-color: #f7c546;
+        }
+    .signup .form-group  button[type="reset"]{
+            background-color: rgba(255, 255, 255, 0.6);
+            color: white;
+            border-color: rgba(255, 255, 255, 0.6);
+        }
+    .signup a{
+        background-color: #f7c546;
+        border-color: #f7c546;
+        color: white;
+    }
+    .signup a:hover{
+        background-color: #f7c546;
+        color: #191919;
+    }
+    </style>
+
+<div class="signup">
+<div class='py-4 mt-auto'>
+    <div class='container px-4'>
+      <div class='container-fluid px-4'>
+        <a href="{% url 'home' %}" class='btn my-3'>Go Home</a></div>
+        <div class="section-title">
+            <span>Add Food Item</span>
+            <h2>Add Food Item</h2>
+            <p>Enter the details of a new food item</p></div>
+
+        {% if success %}
+            <br>
+            <div class='alert alert-dismissible alert-success' role='alert'>
+                <button type='button' class='btn-close' data-bs-dismiss='alert'></button>
+                The new food item added successfully.
+            </div>
+        {% else %} 
+                <div class='row'>
+                    <div class='col-lg-6 offset-lg-3'>
+                        <div class='card bg-secondary mb-3'>
+                            <div class='card-body'>
+    
+                                <div class='form-group'>
+                                    <form action="{% url 'food_add' %}"  method='POST' enctype='multipart/form-data'>
+                                        {% csrf_token %}
+                                        <div class='form-group'>
+                                            {{ food_form.as_p }}
+                                            {{ image_form.management_form }}
+                                            {% for form in image_form %}
+                                                {{ form.as_p }}
+                                            {% endfor %}
+                                            <center><button type='submit' class='btn btn-primary'>Save</button>
+                                            <button type="reset" class='btn btn-primary' id="myForm">Reset</button></center>
+                                        </div>
+                                    </form>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        {% endif %}
+    </div>
+    </div>
+</div>
+{% endblock %}
+
+<script>
+   function myFunction() {
+  document.getElementById("myForm").reset();
+}
+  </script>

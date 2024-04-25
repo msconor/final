@@ -1,0 +1,179 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>SimplFit - Sleep Calculator</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <link href="{%static 'assets\img\logo.png' %}" rel="icon">
+  <link href="{%static 'assets\img\logo.png' %}" rel="apple-touch-icon">
+
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  
+  <link href="{%static 'assets/vendor/aos/aos.css'%}" rel="stylesheet">
+  <link href="{%static 'assets/vendor/bootstrap/css/bootstrap.min.css'%}" rel="stylesheet">
+  <link href="{%static 'assets/vendor/bootstrap-icons/bootstrap-icons.css'%}" rel="stylesheet">
+  <link href="{%static 'assets/vendor/boxicons/css/boxicons.min.css'%}" rel="stylesheet">
+  <link href="{%static 'assets/vendor/glightbox/css/glightbox.min.css'%}" rel="stylesheet">
+  <link href="{%static 'assets/vendor/swiper/swiper-bundle.min.css'%}" rel="stylesheet">
+
+  <link href="{% static 'assets/css/style.css'%}" rel="stylesheet">
+
+</head>
+
+{% block body %}
+    <style>
+    .signup .card-body{
+            background-color: rgba(25, 25, 25, 0.95);
+        }
+
+    .signup .card .card-header{
+            background-color:#191919;
+        }
+
+    .signup .card{
+            color:rgba(255, 255, 255, 0.6);
+            border-color: #191919;
+        }
+    
+    .signup .form-group button{
+            background-color: #f7c546;
+            color: white;
+            border-color: #f7c546;
+        }
+    .signup .form-group  button[type="reset"]{
+            background-color: rgba(255, 255, 255, 0.6);
+            color: white;
+            border-color: rgba(255, 255, 255, 0.6);
+        }
+    .signup a{
+        background-color: #f7c546;
+        border-color: #f7c546;
+        color: white;
+    }
+    .signup a:hover{
+        background-color: #f7c546;
+        color: #191919;
+    }
+    </style>
+
+<div class="signup">
+<div class='py-4 mt-auto'>
+    <div class='container px-4'>
+        <div class="section-title">
+            <span>Sleep Calculator</span>
+            <h2>Sleep Calculator</h2>
+            <p>Calculate your sleep hours</p>
+            </div>
+
+        {% if success %}
+            <br>
+            <div class='alert alert-dismissible alert-success' role='alert'>
+                <button type='button' class='btn-close' data-bs-dismiss='alert'></button>
+                The sleep goal set successfully.
+            </div>
+        {% else %} 
+        <center>
+                <div class='row'>
+                    <div class='col-lg-6 offset-lg-3'>
+                        <div class='card bg-secondary mb-3'>
+                            <div class='card-body'>
+     
+                                <div class='form-group'>
+                                   <form action="{% url 'sleep_goal' %}"  method='POST' enctype='multipart/form-data' onsubmit="myFunction();">
+                                        {% csrf_token %}
+                                        <div class='form-group'>
+                                            <div class='row'>
+                                            <div class='col-5'>
+                                                <label for='sleep_date' class='form-label mt-2' style="color: white;">
+                                                Start Date:
+                                                </label>
+                                                <input
+                                                    class='form-control' type='date' name='sdate' id='sdate' readonly>
+                                            </div>
+                                            <div class='col-5'>
+                                                <label for='sleep_time' class='form-label mt-2' style="color: white;">
+                                                   Start Time
+                                                </label>
+                                                <input 
+                                                    class='form-control' type='time' name='stime' id='stime' placeholder='24-format' required>
+                                            </div>
+                                            </div></div>
+                                            <div class='row'>
+                                                
+                                                <div class='col-5'>
+                                                    <label for='sleep_date1' class='form-label mt-2' style="color: white;">
+                                                    End Date:
+                                                    </label>
+                                                    <input
+                                                        class='form-control' type='date' name='edate' id='edate' required>
+                                                </div>
+                                                <div class='col-5'>
+                                                    <label for='sleep_time1' class='form-label mt-2' style="color: white;">
+                                                       End Time
+                                                    </label>
+                                                    <input 
+                                                        class='form-control' type='time' name='etime' id='etime' placeholder='24-format' required><br>
+                                                </div>
+                            
+                                            <center><button type='submit' class='btn btn-primary'>Save</button>
+                                            <button type="reset" class='btn btn-primary' id="myForm" onclick="reset()">Reset</button></center>
+                                        </div>
+                                    </form>
+                                </div></center>
+                                <script>
+    
+                                    var date = new Date();
+                                        
+                                        var day = date.getDate();
+                                        var month = date.getMonth() + 1;
+                                        var year = date.getFullYear();
+                                        
+                                        if (month < 10) month = "0" + month;
+                                        if (day < 10) day = "0" + day;
+                                        
+                                        var today = year + "-" + month + "-" + day;
+                                        var today1 = year + "-" + month + "-" + (day+1);
+
+                                        document.getElementById("sdate").value = today;
+                                        document.getElementById("edate").value = today1;
+                                    
+                                    function myFunction() {
+                                    var todayformat = year + "/" + month + "/" + day;
+                                    var stime = document.getElementById("stime").value;
+                                    var etime = document.getElementById("etime").value;
+                                    
+                                    const date_1 = new Date(document.getElementById("edate").value);
+                                    const date1 = date_1.getDate();
+                                    date_1.setDate(date1);
+                                    var x = date_1.getFullYear(date_1)+"/"+(date_1.getMonth(date_1)+1)+"/"+date_1.getDate(date_1);
+                                    
+                                    var startTime = new Date(todayformat+' '+stime); 
+                                    var endTime = new Date(x+' '+etime);
+                                    var difference = endTime.getTime() - startTime.getTime(); // This will give difference in milliseconds
+                                    var resultInMinutes = Math.round(difference / 60000);
+                                    var calcution = Math.round(resultInMinutes/60);
+                                    var store = localStorage.setItem("sleep_goal",calcution);
+                                    } 
+                                   
+                                    function reset(){
+                                    document.getElementById("myForm").reset();
+                                    }
+                                    </script>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        {% endif %}
+    </div>
+    </div>
+</div>
+{% endblock %}
+

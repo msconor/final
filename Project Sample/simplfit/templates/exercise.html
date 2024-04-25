@@ -1,0 +1,232 @@
+{% extends 'base.html' %}
+{% load static %}{% load mathfilters%}{% load humanize%}
+{% block body%}
+<title>SimplFit - Exercise Finder</title>
+<style>
+    .aqi-input input{
+        border-radius: 25px;
+        background-color: #191919;
+        color: white;
+        text-align: left;
+    }
+    .aqi-input button{
+        color:#f7c546;
+        background-color: #191919;
+    }
+    .table th{
+        background-color: #f7c546;
+        color: white;
+    }
+   
+</style>
+<style>
+    * {
+      box-sizing: border-box;
+    }
+    
+    .column {
+      float: left;
+      width: 50%;
+      padding: 10px;
+    }
+    
+    .row:after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+
+    .btn {
+      border: none;
+      outline: none;
+      padding: 12px 16px;
+      background-color: #f7c546;
+      cursor: pointer;
+    }
+    
+    .btn:hover {
+      background-color: #f7c546;
+    }
+    
+    .btn.active {
+      background-color: #f7c546;
+      color: white;
+    }
+    </style>
+
+    <section id="aqi" class="aqi">
+    <div class="container">
+
+        <div class="section-title">
+        <span>Exercise Finder</span>
+        <h2>Exercise Finder</h2>
+        <p>Let's make muscles tighter</p>
+        </div>
+        <div class="aqi-input">
+            <form method="POST">
+                {%csrf_token%}
+                <div class="input-group input-group-lg mb-5">
+                    <select name="select" style="background-color: #191919; color: #f7c546; text-align: center;" required>
+                        <center>
+                        <option hidden>&nbsp;&nbsp;Search By</option>
+                        <option disabled>-----Select Any One-----</option>
+                        <option value="name" style="color: white;">Name</option>
+                        <option value="type" style="color: white;">Type</option>
+                        <option value="muscle" style="color: white;">Muscle Group</option>
+                        <option value="difficulty" style="color: white;">Difficulty</option></center>
+                    </select>
+                    <input type="text" name="query" class="form-control inputstyle"
+                        placeholder="Search any workout" required>
+                    <button class="btn whoop" type="submit" id="button-addon2">Find Workout</button>
+                </div>
+            </form>
+            {%if api%}
+            {%if api == "oops! There was an error"%}
+            <div class="alert alert-warning"> Oh no! something went wrong.Please try again in sometime.</div>
+            {%elif api.message%}
+            <div class="alert alert-warning">Please try again after sometime!</div> 
+            {%endif%} 
+            <div id="btnContainer">
+                <button class="btn" onclick="listView()" ><i class="bi-list"></i> List</button> 
+                <button class="btn active" onclick="gridView()"><i class="bi-grid"></i> Grid</button>
+              </div>
+              <br>
+              
+              <div class="row">
+                <div class="column" style="background-color:#f7c546;"><center>
+                  <h5><b>Workout</b><br><span style="font-size: 20px; font-weight:normal; color: white;">{{api.0.name | capfirst}}</span> </h5>
+                  <br><h5><b>Type</b><br><span style="font-size: 20px; font-weight:normal; color: white;">{{api.0.type | capfirst}}</span> </h5>
+                  <br><h5><b>Muscle Group</b><br><span style="font-size: 20px; font-weight:normal; color: white;">{{api.0.muscle | capfirst}}</span></h5>
+                  <br><h5><b>Difficulty</b><br><span style="font-size: 20px; font-weight:normal; color: white;">{{api.0.difficulty | capfirst}}</span></h5>
+                  <br><h5><b>Instructions</b></h5>
+                  <p style="color:white; text-align: justify;">{{api.0.instructions}}</p></center>
+                </div>
+                <div class="column" style="background-color:#efefef;">
+                    <center>
+                        <h5><b>Workout</b><br><span style="font-size: 20px; font-weight:normal; color: #191919">{{api.1.name | capfirst}}</span> </h5>
+                        <br><h5><b>Type</b><br><span style="font-size: 20px; font-weight:normal; color: #191919">{{api.1.type | capfirst}}</span> </h5>
+                        <br><h5><b>Muscle Group</b><br><span style="font-size: 20px; font-weight:normal; color: #191919">{{api.1.muscle | capfirst}}</span></h5>
+                        <br><h5><b>Difficulty</b><br><span style="font-size: 20px; font-weight:normal; color: #191919">{{api.1.difficulty | capfirst}}</span></h5>
+                        <br><h5><b>Instructions</b></h5>
+                        <p style="color: #191919; text-align: justify;">{{api.1.instructions}}</p></center>
+                </div>
+              </div>
+              
+              <div class="row">
+                <div class="column" style="background-color:#efefef;">
+                        <center>
+                            <h5><b>Workout</b><br><span style="font-size: 20px; font-weight:normal; color: #191919">{{api.2.name | capfirst}}</span> </h5>
+                            <br><h5><b>Type</b><br><span style="font-size: 20px; font-weight:normal; color: #191919">{{api.2.type | capfirst}}</span> </h5>
+                            <br><h5><b>Muscle Group</b><br><span style="font-size: 20px; font-weight:normal; color: #191919">{{api.2.muscle | capfirst}}</span></h5>
+                            <br><h5><b>Difficulty</b><br><span style="font-size: 20px; font-weight:normal; color: #191919">{{api.2.difficulty | capfirst}}</span></h5>
+                            <br><h5><b>Instructions</b></h5>
+                            <p style="color: #191919; text-align: justify;">{{api.2.instructions}}</p></center>
+                    </div>
+                <div class="column" style="background-color:#f7c546">
+                    <center>
+                        <h5><b>Workout</b><br><span style="font-size: 20px; font-weight:normal; color: white">{{api.3.name | capfirst}}</span> </h5>
+                        <br><h5><b>Type</b><br><span style="font-size: 20px; font-weight:normal; color: white">{{api.3.type | capfirst}}</span> </h5>
+                        <br><h5><b>Muscle Group</b><br><span style="font-size: 20px; font-weight:normal; color: white">{{api.3.muscle | capfirst}}</span></h5>
+                        <br><h5><b>Difficulty</b><br><span style="font-size: 20px; font-weight:normal; color: white">{{api.3.difficulty | capfirst}}</span></h5>
+                        <br><h5><b>Instructions</b></h5>
+                        <p style="color: white; text-align: justify;">{{api.3.instructions}}</p></center>
+                </div>
+              </div>
+              <div class="row">
+                <div class="column" style="background-color:#f7c546;">
+                        <center>
+                            <h5><b>Workout</b><br><span style="font-size: 20px; font-weight:normal; color: white">{{api.4.name | capfirst}}</span> </h5>
+                            <br><h5><b>Type</b><br><span style="font-size: 20px; font-weight:normal; color: white">{{api.4.type | capfirst}}</span> </h5>
+                            <br><h5><b>Muscle Group</b><br><span style="font-size: 20px; font-weight:normal; color: white">{{api.4.muscle | capfirst}}</span></h5>
+                            <br><h5><b>Difficulty</b><br><span style="font-size: 20px; font-weight:normal; color: white">{{api.4.difficulty | capfirst}}</span></h5>
+                            <br><h5><b>Instructions</b></h5>
+                            <p style="color: white; text-align: justify;">{{api.4.instructions}}</p></center>
+                    </div>
+                    <div class="column" style="background-color:#efefef;">
+                        <center>
+                            <h5><b>Workout</b><br><span style="font-size: 20px; font-weight:normal; color: #191919">{{api.5.name | capfirst}}</span> </h5>
+                            <br><h5><b>Type</b><br><span style="font-size: 20px; font-weight:normal; color: #191919">{{api.5.type | capfirst}}</span> </h5>
+                            <br><h5><b>Muscle Group</b><br><span style="font-size: 20px; font-weight:normal; color: #191919">{{api.5.muscle | capfirst}}</span></h5>
+                            <br><h5><b>Difficulty</b><br><span style="font-size: 20px; font-weight:normal; color: #191919">{{api.5.difficulty | capfirst}}</span></h5>
+                            <br><h5><b>Instructions</b></h5>
+                            <p style="color: #191919; text-align: justify;">{{api.5.instructions}}</p></center>
+                    </div>
+              </div>
+                
+              <div class="row">
+                <div class="column" style="background-color:#efefef;">
+                        <center>
+                            <h5><b>Workout</b><br><span style="font-size: 20px; font-weight:normal; color: #191919">{{api.6.name | capfirst}}</span> </h5>
+                            <br><h5><b>Type</b><br><span style="font-size: 20px; font-weight:normal; color: #191919">{{api.6.type | capfirst}}</span> </h5>
+                            <br><h5><b>Muscle Group</b><br><span style="font-size: 20px; font-weight:normal; color: #191919">{{api.6.muscle | capfirst}}</span></h5>
+                            <br><h5><b>Difficulty</b><br><span style="font-size: 20px; font-weight:normal; color: #191919">{{api.6.difficulty | capfirst}}</span></h5>
+                            <br><h5><b>Instructions</b></h5>
+                            <p style="color: #191919; text-align: justify;">{{api.6.instructions}}</p></center>
+                    </div>
+                <div class="column" style="background-color:#f7c546">
+                    <center>
+                        <h5><b>Workout</b><br><span style="font-size: 20px; font-weight:normal; color: white">{{api.7.name | capfirst}}</span> </h5>
+                        <br><h5><b>Type</b><br><span style="font-size: 20px; font-weight:normal; color: white">{{api.7.type | capfirst}}</span> </h5>
+                        <br><h5><b>Muscle Group</b><br><span style="font-size: 20px; font-weight:normal; color:white">{{api.7.muscle | capfirst}}</span></h5>
+                        <br><h5><b>Difficulty</b><br><span style="font-size: 20px; font-weight:normal; color: white">{{api.7.difficulty | capfirst}}</span></h5>
+                        <br><h5><b>Instructions</b></h5>
+                        <p style="color: white; text-align: justify;">{{api.7.instructions}}</p></center>
+                </div>
+              </div>
+              <div class="row">
+                <div class="column" style="background-color:#f7c546;">
+                        <center>
+                            <h5><b>Workout</b><br><span style="font-size: 20px; font-weight:normal; color: white">{{api.8.name | capfirst}}</span> </h5>
+                            <br><h5><b>Type</b><br><span style="font-size: 20px; font-weight:normal; color: white">{{api.8.type | capfirst}}</span> </h5>
+                            <br><h5><b>Muscle Group</b><br><span style="font-size: 20px; font-weight:normal; color: white">{{api.8.muscle | capfirst}}</span></h5>
+                            <br><h5><b>Difficulty</b><br><span style="font-size: 20px; font-weight:normal; color: white">{{api.8.difficulty | capfirst}}</span></h5>
+                            <br><h5><b>Instructions</b></h5>
+                            <p style="color: white; text-align: justify;">{{api.8.instructions}}</p></center>
+                    </div>
+                    <div class="column" style="background-color:#efefef;">
+                        <center>
+                            <h5><b>Workout</b><br><span style="font-size: 20px; font-weight:normal; color: #191919">{{api.9.name | capfirst}}</span> </h5>
+                            <br><h5><b>Type</b><br><span style="font-size: 20px; font-weight:normal; color: #191919">{{api.9.type | capfirst}}</span> </h5>
+                            <br><h5><b>Muscle Group</b><br><span style="font-size: 20px; font-weight:normal; color: #191919">{{api.9.muscle | capfirst}}</span></h5>
+                            <br><h5><b>Difficulty</b><br><span style="font-size: 20px; font-weight:normal; color: #191919">{{api.9.difficulty | capfirst}}</span></h5>
+                            <br><h5><b>Instructions</b></h5>
+                            <p style="color: #191919; text-align: justify;">{{api.9.instructions}}</p></center>
+                    </div>
+              </div>
+            {%endif%}
+            
+    </div>
+    </section>
+
+    <script>
+       
+        var elements = document.getElementsByClassName("column");
+        
+       
+        var i;
+        
+        
+        function listView() {
+          for (i = 0; i < elements.length; i++) {
+            elements[i].style.width = "100%";
+          }
+        }
+        
+        
+        function gridView() {
+          for (i = 0; i < elements.length; i++) {
+            elements[i].style.width = "50%";
+          }
+        }
+        
+        var container = document.getElementById("btnContainer");
+        var btns = container.getElementsByClassName("btn");
+        for (var i = 0; i < btns.length; i++) {
+          btns[i].addEventListener("click", function() {
+            var current = document.getElementsByClassName("active");
+            current[0].className = current[0].className.replace(" active", "");
+            this.className += " active";
+          });
+        }
+        </script>
+{% endblock %}

@@ -1,0 +1,501 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>SimplFit - User Profile</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <link href="{%static 'assets\img\logo.png' %}" rel="icon">
+  <link href="{%static 'assets\img\logo.png' %}" rel="apple-touch-icon">
+
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  <link href="{%static 'assets/vendor/aos/aos.css'%}" rel="stylesheet">
+  <link href="{%static 'assets/vendor/bootstrap/css/bootstrap.min.css'%}" rel="stylesheet">
+  <link href="{%static 'assets/vendor/bootstrap-icons/bootstrap-icons.css'%}" rel="stylesheet">
+  <link href="{%static 'assets/vendor/boxicons/css/boxicons.min.css'%}" rel="stylesheet">
+  <link href="{%static 'assets/vendor/glightbox/css/glightbox.min.css'%}" rel="stylesheet">
+  <link href="{%static 'assets/vendor/swiper/swiper-bundle.min.css'%}" rel="stylesheet">
+
+  <link href="{% static 'assets/css/style.css'%}" rel="stylesheet">
+
+</head>
+
+<body>
+
+  <section id="topbar" class="d-flex align-items-center">
+    <div class="container d-flex justify-content-center justify-content-md-between">
+      <div class="contact-info d-flex align-items-center">
+        <i class="bi bi-envelope-fill"></i><a href="mailto:info@simplfit.com">info@simplfit.com</a>
+        <i class="bi bi-phone-fill phone-icon"></i> 0416-222456
+      </div>
+      <div class="social-links d-none d-md-block" >
+        <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
+        <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
+        <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
+        <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+        <a>
+            <label class="switch">
+              <input type="checkbox"onclick="myFunction()" >
+              <span class="slider round"></span>
+            </label></i></a>
+        <a href="#" class="location"><i class="bi-geo-alt-fill loc-info"> </i><span id="city"></span></a>
+        <script>
+          async function fetchText(){
+    let url ='https://ipinfo.io/json?token=94703aed4ea5bf';/*94703aed4ea5bf*/
+    let response = await fetch(url);
+    let data = await response.json();
+    document.getElementById("city").innerHTML=data.city;
+    console.log(data);
+}
+fetchText();
+      </script>
+      </div>
+    </div>
+   
+  </section>
+
+  <header id="header" class="d-flex align-items-center">
+    <div class="container d-flex align-items-center justify-content-between">
+
+      <h1 class="logo"><a href="{%url 'home'%}">SimplFit</a></h1>
+      
+
+      <nav id="navbar" class="navbar">
+      
+        <ul>    
+          
+          {% if user.is_authenticated %}
+          <li class='dropdown' ><a href="#"><i class="bi-person" style="font-size: 20px;"></i><i class="bi bi-chevron-down"></i></a>
+              <ul class='dropdown-1'>
+                <li><a href="{% url 'logout' %}" id="btn" onclick="test()">Logout<i class="bi-box-arrow-left" style="font-size: 14px;"></i></a></li>
+                          
+                <script>
+                    function test(){
+                      localStorage.clear();
+                    }
+                       
+                </script> </ul>
+          </li>
+          {% else %}
+          <li><a class="nav-link scrollto" href="login.html">Login <i class="bi-box-arrow-right" style="font-size: 14px;"></i></a></li> 
+          {% endif %}
+        </ul>
+        <i class="bi bi-list mobile-nav-toggle"></i>
+      </nav>
+     
+    </div>
+  </header>
+
+<body>
+    <style>
+    .profile .card-header{
+        background-color: #191919;
+        color: #f7c546;
+        }
+    .profile .card-header h5{
+        background-color: #191919;
+        color: rgba(255, 255, 255, 0.6);
+        }
+    .profile .card-body{
+        background-color: rgba(25, 25, 25, 0.95);
+        }
+    .profile .card-body p{
+        color: white;
+    }
+    .profile .card-body strong{
+        color: #f7c546;
+    }
+    .profile .card-body .form-group button{
+        background-color: #f7c546;
+        border: 2px #f7c546;
+    }
+    .profile .card-body .form-group label{
+        color: white;
+    }
+    .profile .card-body .table thead{
+        color: white;
+    }
+    .profile .card-body .table tbody{
+        color: #f7c546;
+    }
+  
+    .dark-mode {
+  background-color: #121212;
+  color: white;
+    }
+  .switch {
+  position: relative;
+  display: inline-block;
+  width: 38px;
+  height: 20px;
+  bottom: 9px;
+}
+
+.switch input { 
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 12px;
+  width: 12px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+ input:checked + .slider {
+  background-color: #f7c546;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #f7c546;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(16px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+ 
+    
+    </style>
+
+{% block body %}
+<div class="profile">
+<div class='py-4 mt-auto'>
+    <div class='container-fluid px-4'>
+        <a href="{% url 'home' %}" class='btn my-2' style="background-color: #f7c546; color: white;"><i class="bi-house-door"></i></a>
+        <div class='row justify-content-center'>
+            <div class='col-xl-12'>
+                
+                    <div class='row'>
+                        <div class='col-md-6 mt-4'>
+
+                            <div class='card bg-secondary mb-3'>
+                                <div class='card-header'>
+                                    <h5>Welcome, <strong style="color:white;">{{ user.username }}</strong></h5>
+                                </div>
+                                <div class='card-body'>
+
+                                    <div class='d-flex w-100 justify-content-between'>
+                                        <p class='mb-1'>
+                                            Username: <strong>{{ user.username }}</strong>
+                                        </p>
+                                    </div>
+
+                                    <div class='d-flex w-100 justify-content-between'>
+                                        <p class='mb-1'>
+                                            Email: <strong>{{ user.email }}</strong>
+                                        </p>
+                                    </div>
+
+
+                                    <div class='d-flex w-100 center-content-between'>
+                                        <p class='mb-1'>
+                                            Weight: <strong id="weight1">0</strong> <strong> kgs</strong>
+                                        </p>
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                        <p class='mb-1'>
+                                            Height: <strong id="height1">0</strong> <strong> cms</strong>
+                                        </p>
+                                    </div>
+
+                                    <div class='d-flex w-100 justify-content-between'>
+                                        <p class='mb-1'>
+                                            Date joined: <strong>{{ user.date_joined }}</strong>
+                                        </p>
+                                    </div>
+
+                                    <div class='d-flex w-100 justify-content-between'>
+                                        <p class='mb-1'>
+                                            Last login: <strong>{{ user.last_login }}</strong>
+                                        </p>
+                                    </div>
+                                    <script>
+                                        var x = localStorage.getItem("weight");
+                                        document.getElementById("weight1").innerHTML=x;
+                                        var x1 = localStorage.getItem("height");
+                                        document.getElementById("height1").innerHTML=x1;
+                                    </script>
+
+                                </div>
+                            </div>
+
+                            <div class='card bg-secondary mb-3'>
+
+                                <div class='card-header'>
+                                    <h4>Record Your Weight & Height</h4>
+                                </div>
+                                
+                                <div class='card-body'>
+
+                                <div class='form-group'>
+          
+                                        <form action="{% url 'weight_log' %}" method='POST' onsubmit="mysave()">
+                                            {% csrf_token %}
+                                            <div class='form-group'>
+                                                <div class='row'>
+                                                    <div class='col-5'>
+                                                        <label for='date_weight' class='form-label mt-2'>
+                                                            Date:
+                                                        </label>
+                                                        <input
+                                                            class='form-control'
+                                                            type='date'
+                                                            name='date' 
+                                                            id='date'
+                                                        readonly>
+                                                    </div>
+                                                    <div class='col-5'>
+                                                        <label for='weight' class='form-label mt-2'>
+                                                            Weight (in kg):
+                                                        </label>
+                                                        <input 
+                                                            class='form-control'
+                                                            type='number' 
+                                                            name='weight'
+                                                            id='weight'
+                                                            placeholder='0.00' required name='weight' 
+                                                            min='0' 
+                                                            
+                                                            step='1' 
+                                                            title='Weight' 
+                                                            pattern='^\d*(\.\d{0,2})?$'
+                                                        >
+                                                    </div>
+
+                                                    <div class='col-5'>
+                                                        <label for='weight' class='form-label mt-2'>
+                                                            Height (in cm):
+                                                        </label>
+                                                        <input 
+                                                            class='form-control'
+                                                            type='number' 
+                                                            name='height'
+                                                            id='height'
+                                                            placeholder='0.00' required name='height' 
+                                                            min='0' 
+                                                            step='1' 
+                                                            title='Height' 
+                                                            pattern='^\d*(\.\d{0,2})?$'
+                                                        >
+                                                    </div>
+                                                    <div class='col-2'>
+                                                        <button type='submit' class='btn btn-primary' style='margin-top:40px;'>
+                                                            Add
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+<script>
+function mysave(){
+    var x = document.getElementById("weight").value;
+    var x1 = localStorage.setItem("weight",x);
+    var x2 = document.getElementById("height").value;
+    var x3 = localStorage.setItem("height",x2);
+    console.log(x);}
+</script>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class='card bg-secondary mb-3'>
+                                <div class='card-header'>
+                                    <h4>Weight & Height Log  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a class='btn btn-danger' href="{% url 'weight_log_delete_all' %}" onclick="return confirm('Are you sure you want to clear food log?');">
+                                        <span style="color: white;">Clear Log</span>
+                                     </a> </h4>
+                                </div>
+                                <div class='card-body'>
+
+                                    <table id='weightable' class='table'>
+                                        <thead>
+                                            <tr>
+                                                <th scope='col' class='col-md-4'>Weight (in kg)</th>
+                                                <th scope='col' class='col-md-4'>Height (in cm)</th>
+                                                <th scope='col' class='col-md-4'>Date</th>
+                                                <th scope='col' class='col-md-4'></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for weight_record in user_weight_log %}
+                                                <tr>
+                                                    <td class='col-md-4' >{{ weight_record.weight }}</td>
+                                                    <td class='col-md-4' >{{ weight_record.height }}</td>
+                                                    <td class='col-md-4'>{{ weight_record.entry_date|date:'d-m-Y' }}</td>
+                                                    <td class='col-md-4'>
+
+                                                        <a class='btn btn-danger' href="{% url 'weight_log_delete' weight_record.id %}" onclick="return confirm('Are you sure you want to delete this item?');">
+                                                        <i class="bi-trash"></i></a>
+
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                            </div>
+                            
+                        </div>
+                        
+                        <div class='col-md-6 mt-4'>
+                            <div class='card bg-secondary mb-3'>
+                                <div class='card-header'>
+                                    <h4>Weight History</h4>
+                                </div>
+                                <div class='card-body justify-content-center'>
+                                    <div class='chart-bar'>
+                                        <canvas id='myChart'></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>    
+{% endblock %}
+
+{% block script %}
+<script>
+    var date = new Date();
+
+var day = date.getDate();
+var month = date.getMonth() + 1;
+var year = date.getFullYear();
+
+if (month < 10) month = "0" + month;
+if (day < 10) day = "0" + day;
+
+var today = year + "-" + month + "-" + day;       
+document.getElementById("date").value = today;
+</script>
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+
+    <script>
+        var table  = document.getElementById('weightable');
+
+var recorded_weight = [];
+var recorded_height=[];
+var recorded_date = [];
+
+for(var i = 1; i < table.rows.length; i++) {
+    recorded_weight.push([
+        parseFloat(table.rows[i].cells[0].innerHTML)
+    ]);
+
+    recorded_height.push([
+         parseFloat(table.rows[i].cells[1].innerHTML)
+    ]);
+    recorded_date.push([
+        table.rows[i].cells[2].innerHTML
+    ]); 
+}
+
+var values = recorded_weight.flat();
+var values1 = recorded_height.flat();
+
+
+// Set new default font family and font color to mimic Bootstrap's default styling
+Chart.defaults.global.defaultFontFamily = 'system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"';
+Chart.defaults.global.defaultFontColor = '#858796';
+
+// Area Chart - Weight History
+var ctx = document.getElementById('myChart');
+var myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: [...recorded_date],
+        datasets: [{
+            label: 'Weight',
+            data: values,
+            lineTension: 0.3,
+            fill: true,
+            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+            borderColor: 'rgb(255, 99, 132)',
+            pointBackgroundColor: 'rgb(255, 99, 132)',
+            pointBorderColor: '#fff',
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor: 'rgb(255, 99, 132)'
+        },
+        {
+            label: 'Height',
+            type: 'bubble',
+            data: values1,
+            lineTension: 0.3,
+            fill: true,
+            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+            borderColor: 'rgb(54, 162, 235)',
+            pointBackgroundColor: 'rgb(54, 162, 235)',
+            pointBorderColor: '#fff',
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor: 'rgb(54, 162, 235)'
+    }],
+    },
+    options: {
+    plugins: {
+      title: {
+        display: true,
+        text: 'Chart.js Stacked Line/Bar Chart'
+      }
+    },
+    scales: {
+      y: {
+        stacked: true
+      }
+    }
+  },
+});
+    </script>
+    
+<script>
+    function myFunction() {
+       var element = document.body;
+       element.classList.toggle("dark-mode");
+    }
+    </script>
+{% endblock %}
+</body>
+</html>
